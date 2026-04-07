@@ -282,3 +282,4 @@ class OfflineIndicator extends ConsumerWidget {
       ),
     );
 }
+}

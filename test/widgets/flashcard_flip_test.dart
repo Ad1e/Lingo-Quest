@@ -15,15 +15,21 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 // Mock data models for testing
 class MockFlashcard {
   final String id;
-  final String word;
-  final String translation;
+  final String front;
+  final String back;
   final String? audioUrl;
+  final String deckId;
+  final DateTime createdAt;
+  final DateTime lastReviewedAt;
 
   MockFlashcard({
     required this.id,
-    required this.word,
-    required this.translation,
+    required this.front,
+    required this.back,
     this.audioUrl,
+    required this.deckId,
+    required this.createdAt,
+    required this.lastReviewedAt,
   });
 }
 
@@ -98,7 +104,7 @@ class _FlashcardWidgetState extends State<FlashcardWidget>
               child: Center(
                 child: _isFlipped
                     ? Text(
-                        widget.card.translation,
+                        widget.card.back,
                         style: const TextStyle(
                           color: Colors.white,
                           fontSize: 24,
@@ -107,7 +113,7 @@ class _FlashcardWidgetState extends State<FlashcardWidget>
                         textAlign: TextAlign.center,
                       )
                     : Text(
-                        widget.card.word,
+                        widget.card.front,
                         style: const TextStyle(
                           color: Colors.white,
                           fontSize: 24,
@@ -163,10 +169,13 @@ class RatingButtons extends StatelessWidget {
 void main() {
   group('Flashcard Flip Animation Tests', () {
     testWidgets('card displays front side initially', (WidgetTester tester) async {
-      const card = MockFlashcard(
+      final card = MockFlashcard(
         id: '1',
-        word: 'Gato',
-        translation: 'Cat',
+        front: 'Gato',
+        back: 'Cat',
+        deckId: 'deck-1',
+        createdAt: DateTime.now(),
+        lastReviewedAt: DateTime.now(),
       );
 
       await tester.pumpWidget(
@@ -186,10 +195,13 @@ void main() {
     });
 
     testWidgets('tapping card flips to back side', (WidgetTester tester) async {
-      const card = MockFlashcard(
+      final card = MockFlashcard(
         id: '1',
-        word: 'Gato',
-        translation: 'Cat',
+        front: 'Gato',
+        back: 'Cat',
+        deckId: 'deck-1',
+        createdAt: DateTime.now(),
+        lastReviewedAt: DateTime.now(),
       );
 
       await tester.pumpWidget(
@@ -213,10 +225,13 @@ void main() {
     });
 
     testWidgets('double tap flips back to front', (WidgetTester tester) async {
-      const card = MockFlashcard(
+      final card = MockFlashcard(
         id: '1',
-        word: 'Gato',
-        translation: 'Cat',
+        front: 'Gato',
+        back: 'Cat',
+        deckId: 'deck-1',
+        createdAt: DateTime.now(),
+        lastReviewedAt: DateTime.now(),
       );
 
       await tester.pumpWidget(
@@ -243,10 +258,13 @@ void main() {
     });
 
     testWidgets('animation completes in reasonable time', (WidgetTester tester) async {
-      const card = MockFlashcard(
+      final card = MockFlashcard(
         id: '1',
-        word: 'Gato',
-        translation: 'Cat',
+        front: 'Gato',
+        back: 'Cat',
+        deckId: 'deck-1',
+        createdAt: DateTime.now(),
+        lastReviewedAt: DateTime.now(),
       );
 
       await tester.pumpWidget(
@@ -273,10 +291,13 @@ void main() {
     });
 
     testWidgets('animation is smooth (no jank)', (WidgetTester tester) async {
-      const card = MockFlashcard(
+      final card = MockFlashcard(
         id: '1',
-        word: 'Gato',
-        translation: 'Cat',
+        front: 'Gato',
+        back: 'Cat',
+        deckId: 'deck-1',
+        createdAt: DateTime.now(),
+        lastReviewedAt: DateTime.now(),
       );
 
       await tester.pumpWidget(
@@ -303,10 +324,13 @@ void main() {
     });
 
     testWidgets('state persists after animation', (WidgetTester tester) async {
-      const card = MockFlashcard(
+      final card = MockFlashcard(
         id: '1',
-        word: 'Gato',
-        translation: 'Cat',
+        front: 'Gato',
+        back: 'Cat',
+        deckId: 'deck-1',
+        createdAt: DateTime.now(),
+        lastReviewedAt: DateTime.now(),
       );
 
       await tester.pumpWidget(
@@ -454,10 +478,13 @@ void main() {
       int? ratingReceived;
       bool nextPressed = false;
 
-      const card = MockFlashcard(
+      final card = MockFlashcard(
         id: '1',
-        word: 'Gato',
-        translation: 'Cat',
+        front: 'Gato',
+        back: 'Cat',
+        deckId: 'deck-1',
+        createdAt: DateTime.now(),
+        lastReviewedAt: DateTime.now(),
       );
 
       await tester.pumpWidget(
@@ -501,10 +528,13 @@ void main() {
   group('Performance Tests', () {
     testWidgets('multiple rapid flips perform well',
         (WidgetTester tester) async {
-      const card = MockFlashcard(
+      final card = MockFlashcard(
         id: '1',
-        word: 'Gato',
-        translation: 'Cat',
+        front: 'Gato',
+        back: 'Cat',
+        deckId: 'deck-1',
+        createdAt: DateTime.now(),
+        lastReviewedAt: DateTime.now(),
       );
 
       await tester.pumpWidget(

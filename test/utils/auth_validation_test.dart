@@ -259,7 +259,7 @@ void main() {
     test('email error message is helpful', () {
       final error = Validators.validateEmail('invalid');
       expect(error, isNotNull);
-      expect(error, contains('email') | contains('Email') | contains('valid'));
+      expect(error, anyOf(contains('email'), contains('Email'), contains('valid')));
     });
 
     test('password error message includes requirements', () {
@@ -277,7 +277,7 @@ void main() {
     test('password match error is specific', () {
       final error = Validators.validatePasswordMatch('Pass1', 'Pass2');
       expect(error, isNotNull);
-      expect(error, contains('match') | contains('Match'));
+      expect(error, anyOf(contains('match'), contains('Match')));
     });
   });
 

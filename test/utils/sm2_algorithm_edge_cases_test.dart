@@ -20,13 +20,15 @@ void main() {
     setUp(() {
       testCard = FlashcardModel(
         id: 'test-card',
-        word: 'Gato',
-        translation: 'Cat',
-        language: 'es',
+        front: 'Gato',
+        back: 'Cat',
+        deckId: 'deck-1',
         easeFactor: 2.5,
         interval: 1,
         repetitions: 0,
         nextReviewDate: DateTime.now(),
+        createdAt: DateTime.now(),
+        lastReviewedAt: DateTime.now(),
       );
     });
 
@@ -284,24 +286,26 @@ void main() {
   group('SM-2 Performance Tests', () {
     test('algorithm processes 1000 cards efficiently', () {
       final stopwatch = Stopwatch()..start();
-      
+
       var card = FlashcardModel(
         id: 'test',
-        word: 'test',
-        translation: 'test',
-        language: 'en',
+        front: 'test',
+        back: 'test',
+        deckId: 'deck-1',
         easeFactor: 2.5,
         interval: 1,
         repetitions: 0,
         nextReviewDate: DateTime.now(),
+        createdAt: DateTime.now(),
+        lastReviewedAt: DateTime.now(),
       );
-      
+
       for (int i = 0; i < 1000; i++) {
         card = calculateNextReview(card, i % 4); // Cycle through ratings
       }
-      
+
       stopwatch.stop();
-      
+
       // Should complete in less than 100ms
       expect(stopwatch.elapsedMilliseconds, lessThan(100));
     });

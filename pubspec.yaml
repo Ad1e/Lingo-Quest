@@ -47,7 +47,7 @@ dependencies:
   # Local Storage
   sqflite: ^2.3.0
   drift: ^2.14.0
-  drift_flutter: ^0.2.7
+  drift_flutter: 0.2.0
   hive: ^2.2.3
   hive_flutter: ^1.1.0
   path_provider: ^2.1.0
@@ -143,3 +143,5 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
+dependency_overrides:
+  firebase_storage_web: ^3.9.0

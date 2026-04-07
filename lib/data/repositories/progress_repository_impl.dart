@@ -1,9 +1,9 @@
 import 'package:injectable/injectable.dart';
 import 'package:drift/drift.dart' as drift;
-import 'package:my_app/lib/data/datasources/local/database_helper.dart';
-import 'package:my_app/lib/data/datasources/local/progress_local_ds.dart';
-import 'package:my_app/lib/data/datasources/remote/cloud_functions_ds.dart';
-import 'package:my_app/lib/domain/repositories/progress_repository.dart';
+import 'package:language_learning_app/data/datasources/local/database_helper.dart';
+import 'package:language_learning_app/data/datasources/local/progress_local_ds.dart';
+import 'package:language_learning_app/data/datasources/remote/cloud_functions_ds.dart';
+import 'package:language_learning_app/domain/repositories/progress_repository.dart';
 
 /// Implementation of ProgressRepository with offline-first strategy
 @Singleton(as: ProgressRepository)

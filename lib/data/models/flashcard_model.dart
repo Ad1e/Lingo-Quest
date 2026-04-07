@@ -9,13 +9,15 @@ class FlashcardModel with _$FlashcardModel {
     required String id,
     required String front,
     required String back,
-    required String audioUrl,
-    required String exampleSentence,
+    String? audioUrl,
+    String? exampleSentence,
     required String deckId,
     required DateTime nextReviewDate,
     required double easeFactor,
     required int interval,
     required int repetitions,
+    required DateTime createdAt,
+    required DateTime lastReviewedAt,
   }) = _FlashcardModel;
 
   factory FlashcardModel.fromJson(Map<String, dynamic> json) =>

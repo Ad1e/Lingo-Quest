@@ -11,13 +11,15 @@ _$FlashcardModelImpl _$$FlashcardModelImplFromJson(Map<String, dynamic> json) =>
       id: json['id'] as String,
       front: json['front'] as String,
       back: json['back'] as String,
-      audioUrl: json['audioUrl'] as String,
-      exampleSentence: json['exampleSentence'] as String,
+      audioUrl: json['audioUrl'] as String?,
+      exampleSentence: json['exampleSentence'] as String?,
       deckId: json['deckId'] as String,
       nextReviewDate: DateTime.parse(json['nextReviewDate'] as String),
       easeFactor: (json['easeFactor'] as num).toDouble(),
       interval: (json['interval'] as num).toInt(),
       repetitions: (json['repetitions'] as num).toInt(),
+      createdAt: DateTime.parse(json['createdAt'] as String),
+      lastReviewedAt: DateTime.parse(json['lastReviewedAt'] as String),
     );
 
 Map<String, dynamic> _$$FlashcardModelImplToJson(
@@ -33,4 +35,6 @@ Map<String, dynamic> _$$FlashcardModelImplToJson(
   'easeFactor': instance.easeFactor,
   'interval': instance.interval,
   'repetitions': instance.repetitions,
+  'createdAt': instance.createdAt.toIso8601String(),
+  'lastReviewedAt': instance.lastReviewedAt.toIso8601String(),
 };

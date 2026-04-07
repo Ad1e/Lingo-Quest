@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "733694166310",
+    "project_id": "lingoquest-d47b0",
+    "storage_bucket": "lingoquest-d47b0.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:733694166310:android:7bb5b1674af9cf37512de7",
+        "android_client_info": {
+          "package_name": "com.example.LingoQuest"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAkby_w-0aXyw1te3jX1xkRkGeBP2YvEhU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:733694166310:android:2ad6f7ca6f89368b512de7",
+        "android_client_info": {
+          "package_name": "com.example.lingoquest"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAkby_w-0aXyw1te3jX1xkRkGeBP2YvEhU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

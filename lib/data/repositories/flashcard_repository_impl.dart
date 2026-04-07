@@ -1,8 +1,8 @@
 import 'package:injectable/injectable.dart';
-import 'package:my_app/lib/data/datasources/local/database_helper.dart';
-import 'package:my_app/lib/data/datasources/local/flashcard_local_ds.dart';
-import 'package:my_app/lib/data/datasources/remote/flashcard_remote_ds.dart';
-import 'package:my_app/lib/domain/repositories/flashcard_repository.dart';
+import 'package:language_learning_app/data/datasources/local/database_helper.dart';
+import 'package:language_learning_app/data/datasources/local/flashcard_local_ds.dart';
+import 'package:language_learning_app/data/datasources/remote/flashcard_remote_ds.dart';
+import 'package:language_learning_app/domain/repositories/flashcard_repository.dart';
 
 /// Implementation of FlashcardRepository with offline-first strategy
 @Singleton(as: FlashcardRepository)

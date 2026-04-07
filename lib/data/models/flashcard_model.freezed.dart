@@ -24,13 +24,15 @@ mixin _$FlashcardModel {
   String get id => throw _privateConstructorUsedError;
   String get front => throw _privateConstructorUsedError;
   String get back => throw _privateConstructorUsedError;
-  String get audioUrl => throw _privateConstructorUsedError;
-  String get exampleSentence => throw _privateConstructorUsedError;
+  String? get audioUrl => throw _privateConstructorUsedError;
+  String? get exampleSentence => throw _privateConstructorUsedError;
   String get deckId => throw _privateConstructorUsedError;
   DateTime get nextReviewDate => throw _privateConstructorUsedError;
   double get easeFactor => throw _privateConstructorUsedError;
   int get interval => throw _privateConstructorUsedError;
   int get repetitions => throw _privateConstructorUsedError;
+  DateTime get createdAt => throw _privateConstructorUsedError;
+  DateTime get lastReviewedAt => throw _privateConstructorUsedError;
 
   /// Serializes this FlashcardModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -53,13 +55,15 @@ abstract class $FlashcardModelCopyWith<$Res> {
     String id,
     String front,
     String back,
-    String audioUrl,
-    String exampleSentence,
+    String? audioUrl,
+    String? exampleSentence,
     String deckId,
     DateTime nextReviewDate,
     double easeFactor,
     int interval,
     int repetitions,
+    DateTime createdAt,
+    DateTime lastReviewedAt,
   });
 }
 
@@ -81,13 +85,15 @@ class _$FlashcardModelCopyWithImpl<$Res, $Val extends FlashcardModel>
     Object? id = null,
     Object? front = null,
     Object? back = null,
-    Object? audioUrl = null,
-    Object? exampleSentence = null,
+    Object? audioUrl = freezed,
+    Object? exampleSentence = freezed,
     Object? deckId = null,
     Object? nextReviewDate = null,
     Object? easeFactor = null,
     Object? interval = null,
     Object? repetitions = null,
+    Object? createdAt = null,
+    Object? lastReviewedAt = null,
   }) {
     return _then(
       _value.copyWith(
@@ -103,14 +109,14 @@ class _$FlashcardModelCopyWithImpl<$Res, $Val extends FlashcardModel>
                 ? _value.back
                 : back // ignore: cast_nullable_to_non_nullable
                       as String,
-            audioUrl: null == audioUrl
+            audioUrl: freezed == audioUrl
                 ? _value.audioUrl
                 : audioUrl // ignore: cast_nullable_to_non_nullable
-                      as String,
-            exampleSentence: null == exampleSentence
+                      as String?,
+            exampleSentence: freezed == exampleSentence
                 ? _value.exampleSentence
                 : exampleSentence // ignore: cast_nullable_to_non_nullable
-                      as String,
+                      as String?,
             deckId: null == deckId
                 ? _value.deckId
                 : deckId // ignore: cast_nullable_to_non_nullable
@@ -131,6 +137,14 @@ class _$FlashcardModelCopyWithImpl<$Res, $Val extends FlashcardModel>
                 ? _value.repetitions
                 : repetitions // ignore: cast_nullable_to_non_nullable
                       as int,
+            createdAt: null == createdAt
+                ? _value.createdAt
+                : createdAt // ignore: cast_nullable_to_non_nullable
+                      as DateTime,
+            lastReviewedAt: null == lastReviewedAt
+                ? _value.lastReviewedAt
+                : lastReviewedAt // ignore: cast_nullable_to_non_nullable
+                      as DateTime,
           )
           as $Val,
     );
@@ -150,13 +164,15 @@ abstract class _$$FlashcardModelImplCopyWith<$Res>
     String id,
     String front,
     String back,
-    String audioUrl,
-    String exampleSentence,
+    String? audioUrl,
+    String? exampleSentence,
     String deckId,
     DateTime nextReviewDate,
     double easeFactor,
     int interval,
     int repetitions,
+    DateTime createdAt,
+    DateTime lastReviewedAt,
   });
 }
 
@@ -177,13 +193,15 @@ class __$$FlashcardModelImplCopyWithImpl<$Res>
     Object? id = null,
     Object? front = null,
     Object? back = null,
-    Object? audioUrl = null,
-    Object? exampleSentence = null,
+    Object? audioUrl = freezed,
+    Object? exampleSentence = freezed,
     Object? deckId = null,
     Object? nextReviewDate = null,
     Object? easeFactor = null,
     Object? interval = null,
     Object? repetitions = null,
+    Object? createdAt = null,
+    Object? lastReviewedAt = null,
   }) {
     return _then(
       _$FlashcardModelImpl(
@@ -199,14 +217,14 @@ class __$$FlashcardModelImplCopyWithImpl<$Res>
             ? _value.back
             : back // ignore: cast_nullable_to_non_nullable
                   as String,
-        audioUrl: null == audioUrl
+        audioUrl: freezed == audioUrl
             ? _value.audioUrl
             : audioUrl // ignore: cast_nullable_to_non_nullable
-                  as String,
-        exampleSentence: null == exampleSentence
+                  as String?,
+        exampleSentence: freezed == exampleSentence
             ? _value.exampleSentence
             : exampleSentence // ignore: cast_nullable_to_non_nullable
-                  as String,
+                  as String?,
         deckId: null == deckId
             ? _value.deckId
             : deckId // ignore: cast_nullable_to_non_nullable
@@ -227,6 +245,14 @@ class __$$FlashcardModelImplCopyWithImpl<$Res>
             ? _value.repetitions
             : repetitions // ignore: cast_nullable_to_non_nullable
                   as int,
+        createdAt: null == createdAt
+            ? _value.createdAt
+            : createdAt // ignore: cast_nullable_to_non_nullable
+                  as DateTime,
+        lastReviewedAt: null == lastReviewedAt
+            ? _value.lastReviewedAt
+            : lastReviewedAt // ignore: cast_nullable_to_non_nullable
+                  as DateTime,
       ),
     );
   }
@@ -239,13 +265,15 @@ class _$FlashcardModelImpl implements _FlashcardModel {
     required this.id,
     required this.front,
     required this.back,
-    required this.audioUrl,
-    required this.exampleSentence,
+    this.audioUrl,
+    this.exampleSentence,
     required this.deckId,
     required this.nextReviewDate,
     required this.easeFactor,
     required this.interval,
     required this.repetitions,
+    required this.createdAt,
+    required this.lastReviewedAt,
   });
 
   factory _$FlashcardModelImpl.fromJson(Map<String, dynamic> json) =>
@@ -258,9 +286,9 @@ class _$FlashcardModelImpl implements _FlashcardModel {
   @override
   final String back;
   @override
-  final String audioUrl;
+  final String? audioUrl;
   @override
-  final String exampleSentence;
+  final String? exampleSentence;
   @override
   final String deckId;
   @override
@@ -271,10 +299,14 @@ class _$FlashcardModelImpl implements _FlashcardModel {
   final int interval;
   @override
   final int repetitions;
+  @override
+  final DateTime createdAt;
+  @override
+  final DateTime lastReviewedAt;
 
   @override
   String toString() {
-    return 'FlashcardModel(id: $id, front: $front, back: $back, audioUrl: $audioUrl, exampleSentence: $exampleSentence, deckId: $deckId, nextReviewDate: $nextReviewDate, easeFactor: $easeFactor, interval: $interval, repetitions: $repetitions)';
+    return 'FlashcardModel(id: $id, front: $front, back: $back, audioUrl: $audioUrl, exampleSentence: $exampleSentence, deckId: $deckId, nextReviewDate: $nextReviewDate, easeFactor: $easeFactor, interval: $interval, repetitions: $repetitions, createdAt: $createdAt, lastReviewedAt: $lastReviewedAt)';
   }
 
   @override
@@ -297,7 +329,11 @@ class _$FlashcardModelImpl implements _FlashcardModel {
             (identical(other.interval, interval) ||
                 other.interval == interval) &&
             (identical(other.repetitions, repetitions) ||
-                other.repetitions == repetitions));
+                other.repetitions == repetitions) &&
+            (identical(other.createdAt, createdAt) ||
+                other.createdAt == createdAt) &&
+            (identical(other.lastReviewedAt, lastReviewedAt) ||
+                other.lastReviewedAt == lastReviewedAt));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -314,6 +350,8 @@ class _$FlashcardModelImpl implements _FlashcardModel {
     easeFactor,
     interval,
     repetitions,
+    createdAt,
+    lastReviewedAt,
   );
 
   /// Create a copy of FlashcardModel
@@ -338,13 +376,15 @@ abstract class _FlashcardModel implements FlashcardModel {
     required final String id,
     required final String front,
     required final String back,
-    required final String audioUrl,
-    required final String exampleSentence,
+    final String? audioUrl,
+    final String? exampleSentence,
     required final String deckId,
     required final DateTime nextReviewDate,
     required final double easeFactor,
     required final int interval,
     required final int repetitions,
+    required final DateTime createdAt,
+    required final DateTime lastReviewedAt,
   }) = _$FlashcardModelImpl;
 
   factory _FlashcardModel.fromJson(Map<String, dynamic> json) =
@@ -357,9 +397,9 @@ abstract class _FlashcardModel implements FlashcardModel {
   @override
   String get back;
   @override
-  String get audioUrl;
+  String? get audioUrl;
   @override
-  String get exampleSentence;
+  String? get exampleSentence;
   @override
   String get deckId;
   @override
@@ -370,6 +410,10 @@ abstract class _FlashcardModel implements FlashcardModel {
   int get interval;
   @override
   int get repetitions;
+  @override
+  DateTime get createdAt;
+  @override
+  DateTime get lastReviewedAt;
 
   /// Create a copy of FlashcardModel
   /// with the given fields replaced by the non-null parameter values.

@@ -1,8 +1,8 @@
 import 'package:injectable/injectable.dart';
 import 'package:drift/drift.dart' as drift;
-import 'package:my_app/lib/data/datasources/local/database_helper.dart';
-import 'package:my_app/lib/data/datasources/remote/lesson_remote_ds.dart';
-import 'package:my_app/lib/domain/repositories/lesson_repository.dart';
+import 'package:language_learning_app/data/datasources/local/database_helper.dart';
+import 'package:language_learning_app/data/datasources/remote/lesson_remote_ds.dart';
+import 'package:language_learning_app/domain/repositories/lesson_repository.dart';
 
 /// Implementation of LessonRepository with offline-first strategy
 @Singleton(as: LessonRepository)

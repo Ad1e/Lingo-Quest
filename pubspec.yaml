@@ -65,6 +65,8 @@ dependencies:
   audioplayers: ^6.0.0
   record: ^5.0.0
   speech_to_text: ^6.3.0
+  flutter_tts: ^4.2.5
+  audio_session: ^0.1.14
 
   # Machine Learning and NLP
   google_mlkit_language_id: ^0.5.0

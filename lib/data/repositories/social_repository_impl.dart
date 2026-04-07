@@ -1,6 +1,6 @@
 import 'package:injectable/injectable.dart';
-import 'package:my_app/lib/data/datasources/remote/cloud_functions_ds.dart';
-import 'package:my_app/lib/domain/repositories/social_repository.dart';
+import 'package:language_learning_app/data/datasources/remote/cloud_functions_ds.dart';
+import 'package:language_learning_app/domain/repositories/social_repository.dart';
 
 /// Implementation of SocialRepository
 @Singleton(as: SocialRepository)

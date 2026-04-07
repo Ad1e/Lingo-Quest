@@ -67,7 +67,7 @@ class UserProgress extends Table {
 /// Study History Table
 @DataClassName('StudyHistoryEntity')
 class StudyHistory extends Table {
-  IntColumn get id => autoIncrement()();
+  IntColumn get id => integer().autoIncrement()();
   TextColumn get userId => text()();
   TextColumn get flashcardId => text()();
   TextColumn get deckId => text()();
@@ -145,7 +145,7 @@ class AppDatabase extends _$AppDatabase {
     return (select(flashcards)
           ..where((tbl) =>
               tbl.deckId.equals(deckId) &
-              tbl.nextReviewDate.isBefore(DateTime.now())))
+              tbl.nextReviewDate.isSmallerOrEqualValue(DateTime.now())))
         .get();
   }
 
@@ -348,7 +348,43 @@ class AppDatabase extends _$AppDatabase {
       onConflict: DoUpdate((_) => achievement),
     );
   }
+  // ── Compatibility helpers used by repository implementations ──────────────
+
+  /// Alias used by progress_repository_impl.dart
+  Future<int> insertStudyHistory(StudyHistoryCompanion entry) {
+    return into(studyHistory).insert(entry);
+  }
+
+  /// Alias: get all challenges (repository uses no-arg form)
+  Future<List<ChallengeEntity>> getChallenges() {
+    return select(challenges).get();
+  }
+
+  /// Alias: get achievements without userId filter (repository uses no-arg form)
+  Future<List<AchievementEntity>> getAchievementsAll() {
+    return select(achievements).get();
+  }
+
+  /// Alias: unlock achievement by String achievement name
+  Future<void> unlockAchievementByName(
+      String userId, String achievementName) async {
+    final entity = AchievementEntity(
+      id: achievementName,
+      userId: userId,
+      title: achievementName,
+      description: '',
+      iconPath: '',
+      unlockedAt: DateTime.now(),
+    );
+    await unlockAchievement(entity);
+  }
 }
+
+// ============================================================================
+// DatabaseHelper typedef — lets repository files reference DatabaseHelper
+// without any changes.
+// ============================================================================
+typedef DatabaseHelper = AppDatabase;
 
 // ============================================================================
 // DATABASE CONNECTION

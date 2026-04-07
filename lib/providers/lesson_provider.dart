@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:language_learning_app/domain/repositories/lesson_repository.dart';
+import 'package:language_learning_app/providers/app_providers.dart';
 
 /// State for lesson studies
 class LessonStudyState {
@@ -213,27 +214,21 @@ class LessonListNotifier extends StateNotifier<LessonListState> {
 final lessonStudyProvider =
     StateNotifierProvider.family<LessonStudyNotifier, LessonStudyState, String>(
   (ref, userId) {
-    // TODO: Inject dependencies from ref
-    // final lessonRepository = ref.watch(lessonRepositoryProvider);
-    // return LessonStudyNotifier(lessonRepository, userId);
-    throw UnimplementedError('Dependencies must be provided');
+    final lessonRepository = ref.watch(lessonRepositoryProvider);
+    return LessonStudyNotifier(lessonRepository, userId);
   },
 );
 
 /// Riverpod provider for lesson list
 final lessonListProvider =
     StateNotifierProvider<LessonListNotifier, LessonListState>((ref) {
-  // TODO: Inject dependencies from ref
-  // final lessonRepository = ref.watch(lessonRepositoryProvider);
-  // return LessonListNotifier(lessonRepository);
-  throw UnimplementedError('Dependencies must be provided');
+  final lessonRepository = ref.watch(lessonRepositoryProvider);
+  return LessonListNotifier(lessonRepository);
 });
 
 /// Provider to get lessons by level
 final lessonsByLevelProvider =
     FutureProvider.family<List<Lesson>, String>((ref, level) async {
-  // TODO: Inject dependencies
-  // final lessonRepository = ref.watch(lessonRepositoryProvider);
-  // return lessonRepository.getLessonsByLevel(level);
-  throw UnimplementedError('Dependencies must be provided');
+  final lessonRepository = ref.watch(lessonRepositoryProvider);
+  return lessonRepository.getLessonsByLevel(level);
 });

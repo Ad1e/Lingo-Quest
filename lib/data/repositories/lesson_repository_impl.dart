@@ -1,5 +1,4 @@
 import 'package:injectable/injectable.dart';
-import 'package:drift/drift.dart' as drift;
 import 'package:language_learning_app/data/datasources/local/database_helper.dart';
 import 'package:language_learning_app/data/datasources/remote/lesson_remote_ds.dart';
 import 'package:language_learning_app/domain/repositories/lesson_repository.dart';
@@ -70,15 +69,17 @@ class LessonRepositoryImpl implements LessonRepository {
     int xpEarned,
   ) async {
     try {
-      // Store completion locally
+      // Store completion locally using ChallengeEntity
       await _database.insertChallenge(
-        ChallengesCompanion(
-          id: drift.Value(lessonId),
-          title: drift.Value(lessonId),
-          type: drift.Value('lesson'),
-          xpReward: drift.Value(xpEarned),
-          deadline: drift.Value(DateTime.now().add(Duration(hours: 24))),
-          isCompleted: drift.Value(true),
+        ChallengeEntity(
+          id: lessonId,
+          userId: userId,
+          title: lessonId,
+          type: 'lesson',
+          xpReward: xpEarned,
+          deadline: DateTime.now().add(const Duration(hours: 24)),
+          isCompleted: true,
+          createdAt: DateTime.now(),
         ),
       );
       

@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:language_learning_app/domain/repositories/auth_repository.dart';
+import 'package:language_learning_app/providers/app_providers.dart';
 
 /// State for authentication
 class AuthState {
@@ -141,10 +142,8 @@ class AuthNotifier extends StateNotifier<AuthState> {
 
 /// Riverpod provider for auth state
 final authProvider = StateNotifierProvider<AuthNotifier, AuthState>((ref) {
-  // TODO: Get AuthRepository from dependency injection
-  // final authRepository = ref.watch(authRepositoryProvider);
-  // return AuthNotifier(authRepository);
-  throw UnimplementedError('AuthRepository must be provided');
+  final authRepository = ref.watch(authRepositoryProvider);
+  return AuthNotifier(authRepository);
 });
 
 /// Convenience provider to get current user

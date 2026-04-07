@@ -1,0 +1,50 @@
+Analyzing 4 items...                                            
+
+  error - Undefined class 'StudyHistoryEntity' - lib\data\datasources\local\database_helper.dart:286:31 - undefined_class
+  error - Undefined name 'studyHistory' - lib\data\datasources\local\database_helper.dart:287:17 - undefined_identifier
+  error - The name 'StudyHistoryEntity' isn't a type, so it can't be used as a type argument - lib\data\datasources\local\database_helper.dart:291:15 - non_type_as_type_argument
+  error - Undefined name 'studyHistory' - lib\data\datasources\local\database_helper.dart:292:20 - undefined_identifier
+  error - The getter 'userId' isn't defined for the type 'HasResultSet' - lib\data\datasources\local\database_helper.dart:292:54 - undefined_getter
+  error - The name 'StudyHistoryEntity' isn't a type, so it can't be used as a type argument - lib\data\datasources\local\database_helper.dart:297:15 - non_type_as_type_argument
+  error - Undefined name 'studyHistory' - lib\data\datasources\local\database_helper.dart:302:20 - undefined_identifier
+  error - The getter 'userId' isn't defined for the type 'HasResultSet' - lib\data\datasources\local\database_helper.dart:304:19 - undefined_getter
+  error - The getter 'reviewDate' isn't defined for the type 'HasResultSet' - lib\data\datasources\local\database_helper.dart:305:19 - undefined_getter
+  error - The method 'isAfter' isn't defined for the type 'GeneratedColumn' - lib\data\datasources\local\database_helper.dart:319:28 - undefined_method
+  error - The named parameter 'createdAt' is required, but there's no corresponding argument - lib\data\datasources\local\database_helper.dart:326:22 - missing_required_argument
+  error - The named parameter 'deadline' is required, but there's no corresponding argument - lib\data\datasources\local\database_helper.dart:326:22 - missing_required_argument
+  error - The named parameter 'id' is required, but there's no corresponding argument - lib\data\datasources\local\database_helper.dart:326:22 - missing_required_argument
+  error - The named parameter 'title' is required, but there's no corresponding argument - lib\data\datasources\local\database_helper.dart:326:22 - missing_required_argument
+  error - The named parameter 'type' is required, but there's no corresponding argument - lib\data\datasources\local\database_helper.dart:326:22 - missing_required_argument
+  error - The named parameter 'userId' is required, but there's no corresponding argument - lib\data\datasources\local\database_helper.dart:326:22 - missing_required_argument
+  error - The named parameter 'xpReward' is required, but there's no corresponding argument - lib\data\datasources\local\database_helper.dart:326:22 - missing_required_argument
+  error - Undefined class 'StudyHistoryCompanion' - lib\data\datasources\local\database_helper.dart:354:34 - undefined_class
+  error - Undefined name 'studyHistory' - lib\data\datasources\local\database_helper.dart:355:17 - undefined_identifier
+  error - The function 'File' isn't defined - lib\data\datasources\local\database_helper.dart:396:18 - undefined_function
+  error - The named parameter 'name' is required, but there's no corresponding argument - lib\data\datasources\local\database_helper.dart:397:12 - missing_required_argument
+  error - Too many positional arguments: 0 expected, but 1 found - lib\data\datasources\local\database_helper.dart:397:26 - extra_positional_arguments_could_be_named
+   info - The type name 'AudioPlaybackState_State' isn't an UpperCamelCase identifier - lib\providers\audio_provider.dart:7:7 - camel_case_types
+  error - The argument type 'String?' can't be assigned to the parameter type 'Object'.  - lib\providers\audio_provider.dart:28:48 - argument_type_not_assignable
+   info - The type name 'RecordingState_State' isn't an UpperCamelCase identifier - lib\providers\audio_provider.dart:139:7 - camel_case_types
+warning - Unused import: 'package:language_learning_app/domain/usecases/get_flashcards_usecase.dart' - lib\providers\flashcard_provider.dart:3:8 - unused_import
+warning - The value of the local variable 'updatedCard' isn't used - lib\providers\flashcard_provider.dart:91:13 - unused_local_variable
+warning - Unused import: 'package:language_learning_app/domain/usecases/get_leaderboard_usecase.dart' - lib\providers\leaderboard_provider.dart:3:8 - unused_import
+warning - The value of the local variable 'userId' isn't used - lib\providers\leaderboard_provider.dart:216:12 - unused_local_variable
+warning - The value of the local variable 'timeframe' isn't used - lib\providers\leaderboard_provider.dart:216:20 - unused_local_variable
+warning - Unused import: 'package:language_learning_app/domain/usecases/get_user_stats_usecase.dart' - lib\providers\progress_provider.dart:3:8 - unused_import
+warning - The value of the local variable 'challengeId' isn't used - lib\providers\social_provider.dart:131:13 - unused_local_variable
+warning - The value of the local variable 'deckListState' isn't used - lib\views\screens\home\dashboard_screen.dart:70:11 - unused_local_variable
+   info - Unnecessary use of multiple underscores - lib\views\screens\home\dashboard_screen.dart:138:26 - unnecessary_underscores
+
+flutter : 34 issues found. (ran in 4.3s)
+At line:1 char:1
++ flutter analyze 
+lib/data/datasources/local/database_helper.dart 
+lib/v ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (34 
+    issues found. (ran in 4.3s):String) [], Re  
+  moteException
+    + FullyQualifiedErrorId : NativeCommandErro 
+   r
+ 

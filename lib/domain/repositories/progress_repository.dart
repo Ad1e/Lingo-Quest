@@ -34,6 +34,9 @@ abstract class ProgressRepository {
 
   /// Get achievements earned
   Future<List<Achievement>> getUserAchievements(String userId);
+
+  /// Unlock a specific achievement
+  Future<void> unlockAchievement(String userId, String achievementName);
 }
 
 /// Domain model for User Progress

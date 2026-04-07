@@ -124,13 +124,10 @@ class ProgressRepositoryImpl implements ProgressRepository {
       // Get today's stats
       final today = DateTime.now();
       final todayStart = DateTime(today.year, today.month, today.day);
-      final studyHistory = await _localDataSource.getStudyHistory(
-        userId,
-        days: 1,
-      );
+      final studyHistory = await _localDataSource.getStudyHistoryForDays(userId, 1);
       
       final cardsToday = studyHistory.length;
-      final xpToday = studyHistory.fold(0, (sum, session) => sum + session.xpEarned ?? 0);
+      final xpToday = studyHistory.fold(0, (sum, session) => sum + 10); // 10 XP/card estimate
       
       return UserStatistics(
         userId: userId,
@@ -154,13 +151,13 @@ class ProgressRepositoryImpl implements ProgressRepository {
   Future<DailyStats?> getDailyStats(String userId) async {
     try {
       final today = DateTime.now();
-      final studyHistory = await _localDataSource.getStudyHistory(userId, days: 1);
+      final studyHistory = await _localDataSource.getStudyHistoryForDays(userId, 1);
       
       final cardsStudied = studyHistory.length;
-      final xpEarned = studyHistory.fold(0, (sum, session) => sum + session.xpEarned ?? 0);
+      final xpEarned = studyHistory.length * 10; // 10 XP/card estimate
       final totalTime = studyHistory.fold(
         Duration.zero,
-        (total, session) => total + Duration(milliseconds: session.reviewDuration ?? 0),
+        (total, session) => total + Duration(milliseconds: session.reviewDuration),
       );
       
       return DailyStats(
@@ -179,7 +176,9 @@ class ProgressRepositoryImpl implements ProgressRepository {
   @override
   Future<List<StudySession>> getStudyHistory(String userId, {int days = 30}) async {
     try {
-      final localHistory = await _localDataSource.getStudyHistory(userId, days: days);
+      final localHistory = days == 30
+          ? await _localDataSource.getStudyHistory(userId)
+          : await _localDataSource.getStudyHistoryForDays(userId, days);
       return _mapLocalSessionsToSessions(localHistory);
     } catch (e) {
       rethrow;
@@ -207,10 +206,19 @@ class ProgressRepositoryImpl implements ProgressRepository {
   @override
   Future<List<Achievement>> getUserAchievements(String userId) async {
     try {
-      final achievements = await _database.getAchievements();
+      final achievements = await _database.getAchievements(userId);
       return _mapLocalAchievementsToAchievements(achievements);
     } catch (e) {
       rethrow;
+    }
+  }
+
+  @override
+  Future<void> unlockAchievement(String userId, String achievementName) async {
+    try {
+      await _database.unlockAchievementByName(userId, achievementName);
+    } catch (e) {
+      // Silently ignore duplicate unlock errors
     }
   }
 
@@ -287,7 +295,7 @@ class ProgressRepositoryImpl implements ProgressRepository {
       quality: local.quality,
       reviewDuration: local.reviewDuration,
       reviewDate: local.reviewDate,
-      xpEarned: local.xpEarned ?? 0,
+      xpEarned: 10, // estimated; actual stored in remote
     );
   }
 
@@ -308,20 +316,18 @@ class ProgressRepositoryImpl implements ProgressRepository {
     );
   }
 
-  Achievement _mapLocalAchievementToAchievement(AchievementsData local) {
+  Achievement _mapLocalAchievementToAchievement(AchievementEntity local) {
     return Achievement(
       id: local.id,
-      title: local.id,
-      description: '',
-      iconPath: '',
-      unlockedAt: local.id is String ? DateTime.now() : DateTime.now(),
+      title: local.title,
+      description: local.description,
+      iconPath: local.iconPath,
+      unlockedAt: local.unlockedAt,
     );
   }
 
   List<Achievement> _mapLocalAchievementsToAchievements(
-      List<AchievementsData> locals) {
-    return locals
-        .map(_mapLocalAchievementToAchievement)
-        .toList();
+      List<AchievementEntity> locals) {
+    return locals.map(_mapLocalAchievementToAchievement).toList();
   }
 }

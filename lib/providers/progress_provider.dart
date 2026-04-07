@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:language_learning_app/domain/repositories/progress_repository.dart';
 import 'package:language_learning_app/domain/usecases/get_user_stats_usecase.dart';
+import 'package:language_learning_app/providers/app_providers.dart';
 import 'package:language_learning_app/utils/gamification_models.dart';
 
 /// State for user progress with gamification
@@ -41,7 +42,8 @@ class ProgressState {
     int nextLevelThreshold = GamificationUtils.getNextLevelThreshold(level);
     int xpInCurrentLevel = xp - currentLevelThreshold;
     int xpRequired = nextLevelThreshold - currentLevelThreshold;
-    return (xpInCurrentLevel / xpRequired).clamp(0, 1);
+    if (xpRequired <= 0) return 0.0;
+    return (xpInCurrentLevel / xpRequired).clamp(0.0, 1.0);
   }
 
   /// Get current XP in level (for display purposes)
@@ -300,56 +302,42 @@ class ProgressNotifier extends StateNotifier<ProgressState> {
 final progressProvider =
     StateNotifierProvider.family<ProgressNotifier, ProgressState, String>(
   (ref, userId) {
-    // TODO: Inject dependencies from ref
-    // final progressRepository = ref.watch(progressRepositoryProvider);
-    // return ProgressNotifier(progressRepository, userId);
-    throw UnimplementedError('Dependencies must be provided');
+    final progressRepository = ref.watch(progressRepositoryProvider);
+    return ProgressNotifier(progressRepository, userId);
   },
 );
 
 /// Provider for user statistics
 final userStatsProvider =
     FutureProvider.family<UserStatistics?, String>((ref, userId) async {
-  // TODO: Inject dependencies
-  // final getUserStatsUseCase = ref.watch(getUserStatsUseCaseProvider);
-  // return getUserStatsUseCase(userId);
-  throw UnimplementedError('Dependencies must be provided');
+  final getUserStatsUseCase = ref.watch(getUserStatsUseCaseProvider);
+  return getUserStatsUseCase(userId);
 });
 
 /// Provider for daily stats
 final dailyStatsProvider =
     FutureProvider.family<DailyStats?, String>((ref, userId) async {
-  // TODO: Inject dependencies
-  // final progressRepository = ref.watch(progressRepositoryProvider);
-  // return progressRepository.getDailyStats(userId);
-  throw UnimplementedError('Dependencies must be provided');
+  final progressRepository = ref.watch(progressRepositoryProvider);
+  return progressRepository.getDailyStats(userId);
 });
 
 /// Provider for user achievements
 final userAchievementsProvider =
     FutureProvider.family<List<Achievement>, String>((ref, userId) async {
-  // TODO: Inject dependencies
-  // final progressRepository = ref.watch(progressRepositoryProvider);
-  // return progressRepository.getUserAchievements(userId);
-  throw UnimplementedError('Dependencies must be provided');
+  final progressRepository = ref.watch(progressRepositoryProvider);
+  return progressRepository.getUserAchievements(userId);
 });
 
-/// Provider for XP events
+/// Provider for XP events (derived from progress state)
 final xpEventsProvider =
     Provider.family<List<XpEvent>, String>((ref, userId) {
-  final progress = ref.watch(progressProvider(userId));
-  return progress.maybeWhen(
-    data: (state) => state.recentXpEvents,
-    orElse: () => [],
-  );
+  final state = ref.watch(progressProvider(userId));
+  return state.recentXpEvents;
 });
 
-/// Provider for achievements
+/// Provider for achievements (derived from progress state)
 final achievementsProvider =
     Provider.family<List<AchievementUnlock>, String>((ref, userId) {
-  final progress = ref.watch(progressProvider(userId));
-  return progress.maybeWhen(
-    data: (state) => state.unlockedAchievements,
-    orElse: () => [],
-  );
+  final state = ref.watch(progressProvider(userId));
+  return state.unlockedAchievements;
 });

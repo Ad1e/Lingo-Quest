@@ -1,0 +1,58 @@
+Analyzing 5 items...                                            
+
+  error - The method 'autoIncrement' isn't defined for the type 'StudyHistory' - lib\data\datasources\local\database_helper.dart:70:23 - undefined_method
+  error - The method 'isBefore' isn't defined for the type 'GeneratedColumn' - lib\data\datasources\local\database_helper.dart:148:34 - undefined_method
+  error - Undefined class 'StudyHistoryEntity' - lib\data\datasources\local\database_helper.dart:286:31 - undefined_class
+  error - Undefined name 'studyHistory' - lib\data\datasources\local\database_helper.dart:287:17 - undefined_identifier
+  error - The name 'StudyHistoryEntity' isn't a type, so it can't be used as a type argument - lib\data\datasources\local\database_helper.dart:291:15 - non_type_as_type_argument
+  error - Undefined name 'studyHistory' - lib\data\datasources\local\database_helper.dart:292:20 - undefined_identifier
+  error - The getter 'userId' isn't defined for the type 'HasResultSet' - lib\data\datasources\local\database_helper.dart:292:54 - undefined_getter
+  error - The name 'StudyHistoryEntity' isn't a type, so it can't be used as a type argument - lib\data\datasources\local\database_helper.dart:297:15 - non_type_as_type_argument
+  error - Undefined name 'studyHistory' - lib\data\datasources\local\database_helper.dart:302:20 - undefined_identifier
+  error - The getter 'userId' isn't defined for the type 'HasResultSet' - lib\data\datasources\local\database_helper.dart:304:19 - undefined_getter
+  error - The getter 'reviewDate' isn't defined for the type 'HasResultSet' - lib\data\datasources\local\database_helper.dart:305:19 - undefined_getter
+  error - The method 'isAfter' isn't defined for the type 'GeneratedColumn' - lib\data\datasources\local\database_helper.dart:319:28 - undefined_method
+  error - The named parameter 'createdAt' is required, but there's no corresponding argument - lib\data\datasources\local\database_helper.dart:326:22 - missing_required_argument
+  error - The named parameter 'deadline' is required, but there's no corresponding argument - lib\data\datasources\local\database_helper.dart:326:22 - missing_required_argument
+  error - The named parameter 'id' is required, but there's no corresponding argument - lib\data\datasources\local\database_helper.dart:326:22 - missing_required_argument
+  error - The named parameter 'title' is required, but there's no corresponding argument - lib\data\datasources\local\database_helper.dart:326:22 - missing_required_argument
+  error - The named parameter 'type' is required, but there's no corresponding argument - lib\data\datasources\local\database_helper.dart:326:22 - missing_required_argument
+  error - The named parameter 'userId' is required, but there's no corresponding argument - lib\data\datasources\local\database_helper.dart:326:22 - missing_required_argument
+  error - The named parameter 'xpReward' is required, but there's no corresponding argument - lib\data\datasources\local\database_helper.dart:326:22 - missing_required_argument
+  error - Undefined class 'StudyHistoryCompanion' - lib\data\datasources\local\database_helper.dart:354:34 - undefined_class
+  error - Undefined name 'studyHistory' - lib\data\datasources\local\database_helper.dart:355:17 - undefined_identifier
+  error - The function 'File' isn't defined - lib\data\datasources\local\database_helper.dart:396:18 - undefined_function
+  error - The named parameter 'name' is required, but there's no corresponding argument - lib\data\datasources\local\database_helper.dart:397:12 - missing_required_argument
+  error - Too many positional arguments: 0 expected, but 1 found - lib\data\datasources\local\database_helper.dart:397:26 - extra_positional_arguments_could_be_named
+  error - The name 'UserProgress' is defined in the libraries 'package:language_learning_app/data/datasources/local/database_helper.dart' and 'package:language_learning_app/domain/repositories/progress_repository.dart' - lib\data\repositories\progress_repository_impl.dart:22:10 - ambiguous_import
+  error - 'ProgressRepositoryImpl.getUserProgress' ('Future<dynamic> Function(String)') isn't a valid override of 'ProgressRepository.getUserProgress' ('Future<UserProgress?> Function(String)') - lib\data\repositories\progress_repository_impl.dart:22:25 - invalid_override
+  error - The name 'UserProgress' is defined in the libraries 'package:language_learning_app/data/datasources/local/database_helper.dart' and 'package:language_learning_app/domain/repositories/progress_repository.dart' - lib\data\repositories\progress_repository_impl.dart:37:10 - ambiguous_import
+  error - 'ProgressRepositoryImpl.getOrCreateUserProgress' ('Future<dynamic> Function(String)') isn't a valid override of 'ProgressRepository.getOrCreateUserProgress' ('Future<UserProgress> Function(String)') - lib\data\repositories\progress_repository_impl.dart:37:24 - invalid_override
+warning - The value of the local variable 'localSession' isn't used - lib\data\repositories\progress_repository_impl.dart:93:13 - unused_local_variable
+  error - The method 'StudyHistoryCompanion' isn't defined for the type 'ProgressRepositoryImpl' - lib\data\repositories\progress_repository_impl.dart:95:9 - undefined_method
+warning - The value of the local variable 'todayStart' isn't used - lib\data\repositories\progress_repository_impl.dart:126:13 - unused_local_variable
+warning - The value of the local variable 'milestoneResult' isn't used - lib\data\repositories\progress_repository_impl.dart:251:15 - unused_local_variable
+  error - The name 'UserProgress' is defined in the libraries 'package:language_learning_app/data/datasources/local/database_helper.dart' and 'package:language_learning_app/domain/repositories/progress_repository.dart' - lib\data\repositories\progress_repository_impl.dart:278:3 - ambiguous_import
+  error - 'UserProgress' isn't a function - lib\data\repositories\progress_repository_impl.dart:279:12 - invocation_of_non_function
+  error - The name 'UserProgress' is defined in the libraries 'package:language_learning_app/data/datasources/local/database_helper.dart' and 'package:language_learning_app/domain/repositories/progress_repository.dart' - lib\data\repositories\progress_repository_impl.dart:279:12 - ambiguous_import
+  error - The named parameter 'xpEarned' isn't defined - lib\data\repositories\progress_repository_impl.dart:315:7 - undefined_named_parameter
+  error - The method 'headline' isn't defined for the type 'AppTextStyles' - lib\views\screens\flashcards\flashcard_study_screen.dart:188:40 - undefined_method
+   info - Unnecessary use of multiple underscores - lib\views\screens\flashcards\flashcard_study_screen.dart:284:32 - unnecessary_underscores
+warning - The value of the local variable 'deckListState' isn't used - lib\views\screens\home\dashboard_screen.dart:69:11 - unused_local_variable
+   info - Unnecessary use of multiple underscores - lib\views\screens\home\dashboard_screen.dart:137:26 - unnecessary_underscores
+  error - Undefined name 'flashcardRepositoryProvider' - lib\views\screens\home\dashboard_screen.dart:522:35 - undefined_identifier
+  error - A value of type 'num' can't be assigned to a variable of type 'int' - lib\views\screens\home\dashboard_screen.dart:526:14 - invalid_assignment
+
+flutter : 42 issues found. (ran in 5.8s)
+At line:1 char:1
++ flutter analyze 
+lib/data/datasources/local/database_helper.dart 
+lib/p ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (   
+ 42 issues found. (ran in 5.8s):String) []    , 
+RemoteException
+    + FullyQualifiedErrorId : NativeCommandEr   
+ ror
+ 

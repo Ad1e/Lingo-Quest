@@ -1,6 +1,6 @@
 import 'package:injectable/injectable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:my_app/lib/domain/repositories/auth_repository.dart';
+import 'package:language_learning_app/domain/repositories/auth_repository.dart';
 
 /// Implementation of AuthRepository
 @Singleton(as: AuthRepository)

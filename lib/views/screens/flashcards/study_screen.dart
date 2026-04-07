@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:language_learning_app/domain/repositories/flashcard_repository.dart';
+import 'package:language_learning_app/providers/app_providers.dart';
 
 /// Study screen for flashcard review using SM-2 algorithm
 class StudyScreen extends ConsumerStatefulWidget {
@@ -30,8 +32,9 @@ class _StudyScreenState extends ConsumerState<StudyScreen> {
   int _xpEarned = 0;
   bool _isLoading = true;
   String? _errorMessage;
-  List<StudyCard> _cards = [];
+  List<Flashcard> _cards = [];
   bool _sessionComplete = false;
+  DateTime _cardStartTime = DateTime.now();
 
   @override
   void initState() {
@@ -39,86 +42,75 @@ class _StudyScreenState extends ConsumerState<StudyScreen> {
     _loadCards();
   }
 
-  /// Load cards due for review
+  /// Load cards due for review from the real flashcard repository
   Future<void> _loadCards() async {
     try {
-      // TODO: Implement loading cards from flashcard repository
-      // final flashcardRepository = ref.read(flashcardRepositoryProvider);
-      // final dueCards = await flashcardRepository.getCardsDueForReview(widget.deckId);
-      // setState(() {
-      //   _cards = dueCards
-      //       .map((card) => StudyCard.fromFlashcard(card))
-      //       .toList();
-      //   _totalCards = _cards.length;
-      //   _isLoading = false;
-      // });
-
-      // Demo data for now
-      setState(() {
-        _cards = [
-          StudyCard(
-            id: '1',
-            word: 'Gato',
-            translation: 'Cat',
-            example: 'El gato es negro.',
-            audioUrl: '', // Add URL when available
-            language: 'es',
-          ),
-          StudyCard(
-            id: '2',
-            word: 'Perro',
-            translation: 'Dog',
-            example: 'El perro corre en el parque.',
-            audioUrl: '',
-            language: 'es',
-          ),
-        ];
-        _totalCards = _cards.length;
-        _isLoading = false;
-      });
+      final flashcardRepository = ref.read(flashcardRepositoryProvider);
+      final dueCards = await flashcardRepository.getCardsDueForReview(widget.deckId);
+      if (mounted) {
+        setState(() {
+          _cards = dueCards;
+          _totalCards = dueCards.length;
+          _isLoading = false;
+          _cardStartTime = DateTime.now();
+        });
+      }
     } catch (e) {
-      setState(() {
-        _isLoading = false;
-        _errorMessage = 'Failed to load cards: $e';
-      });
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+          _errorMessage = 'Failed to load cards: $e';
+        });
+      }
     }
   }
 
-  /// Handle rating selection and advance to next card
+  /// Handle rating selection — calls StudyFlashcardUseCase (SM-2 + XP save)
   Future<void> _handleRating(int rating) async {
     if (_currentIndex >= _cards.length) return;
 
-    try {
-      // TODO: Call StudyFlashcardUseCase with SM-2 algorithm
-      // final studyFlashcardUseCase = ref.read(studyFlashcardUseCaseProvider);
-      // final result = await studyFlashcardUseCase(
-      //   userId: widget.userId,
-      //   card: card.toFlashcard(),
-      //   rating: rating,
-      //   duration: 0, // Add actual duration
-      // );
+    final card = _cards[_currentIndex];
+    final durationMs = DateTime.now().difference(_cardStartTime).inMilliseconds;
 
-      // Calculate XP based on rating
-      int xp = _calculateXP(rating);
-      setState(() {
-        _xpEarned += xp;
-      });
+    try {
+      final studyUseCase = ref.read(studyFlashcardUseCaseProvider);
+      await studyUseCase(
+        userId: widget.userId,
+        card: card,
+        rating: rating,
+        duration: durationMs,
+      );
+
+      // XP shown in UI — mirrors StudyFlashcardUseCase._calculateXP
+      final xp = _calculateXP(rating) + (durationMs ~/ 60000).clamp(0, 5);
+      setState(() => _xpEarned += xp);
 
       // Move to next card or complete session
       if (_currentIndex < _cards.length - 1) {
         setState(() {
           _currentIndex++;
           _isFlipped = false;
+          _cardStartTime = DateTime.now();
         });
       } else {
-        setState(() {
-          _sessionComplete = true;
-        });
+        setState(() => _sessionComplete = true);
       }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error: $e')),
-      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error saving review: $e')),
+        );
+        // Still advance card so user isn't stuck
+        if (_currentIndex < _cards.length - 1) {
+          setState(() {
+            _currentIndex++;
+            _isFlipped = false;
+            _cardStartTime = DateTime.now();
+          });
+        } else {
+          setState(() => _sessionComplete = true);
+        }
+      }
     }
   }
 
@@ -260,6 +252,10 @@ class _StudyScreenState extends ConsumerState<StudyScreen> {
 
     final currentCard = _cards[_currentIndex];
     final progress = (_currentIndex + 1) / _totalCards;
+    // card.front / card.back are the domain Flashcard fields
+    final displayWord = currentCard.front;
+    final displayTranslation = currentCard.back;
+    final displayExample = currentCard.exampleSentence ?? '';
 
     return Scaffold(
       appBar: AppBar(
@@ -321,7 +317,7 @@ class _StudyScreenState extends ConsumerState<StudyScreen> {
                 onTap: () {
                   setState(() => _isFlipped = !_isFlipped);
                 },
-                child: _buildFlashcard(currentCard, theme),
+                child: _buildFlashcard(displayWord, displayTranslation, displayExample, theme),
               ),
             ),
 
@@ -405,20 +401,19 @@ class _StudyScreenState extends ConsumerState<StudyScreen> {
   }
 
   /// Build flashcard with flip animation
-  Widget _buildFlashcard(StudyCard card, ThemeData theme) {
+  Widget _buildFlashcard(String word, String translation, String example, ThemeData theme) {
     return AnimatedSwitcher(
       duration: const Duration(milliseconds: 400),
       transitionBuilder: (child, animation) {
         return ScaleTransition(scale: animation, child: child);
       },
       child: _isFlipped
-          ? _buildCardBack(card, theme)
-          : _buildCardFront(card, theme),
+          ? _buildCardBack(translation, example, theme)
+          : _buildCardFront(word, theme),
     );
   }
 
-  /// Build front of card (word)
-  Widget _buildCardFront(StudyCard card, ThemeData theme) {
+  Widget _buildCardFront(String word, ThemeData theme) {
     return Card(
       key: ValueKey('front'),
       elevation: 4,
@@ -440,46 +435,25 @@ class _StudyScreenState extends ConsumerState<StudyScreen> {
           children: [
             Text(
               'Word',
-              style: theme.textTheme.labelMedium?.copyWith(
-                color: Colors.grey[600],
-              ),
+              style: theme.textTheme.labelMedium?.copyWith(color: Colors.grey[600]),
             ),
             const SizedBox(height: 16),
             Text(
-              card.word,
-              style: theme.textTheme.displaySmall?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
+              word,
+              style: theme.textTheme.displaySmall?.copyWith(fontWeight: FontWeight.bold),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 24),
-            if (card.audioUrl.isNotEmpty)
-              Container(
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: theme.primaryColor.withValues(alpha: 0.2),
-                ),
-                child: IconButton(
-                  icon: Icon(
-                    Icons.volume_up,
-                    color: theme.primaryColor,
-                  ),
-                  iconSize: 32,
-                  onPressed: () {
-                    // TODO: Play audio
-                  },
-                ),
-              ),
           ],
         ),
       ),
     );
   }
 
-  /// Build back of card (translation, example, pronunciation)
-  Widget _buildCardBack(StudyCard card, ThemeData theme) {
+  /// Build back of card (translation, example)
+  Widget _buildCardBack(String translation, String example, ThemeData theme) {
     return Card(
-      key: ValueKey('back'),
+      key: const ValueKey('back'),
       elevation: 4,
       child: Container(
         height: 300,
@@ -499,7 +473,6 @@ class _StudyScreenState extends ConsumerState<StudyScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Translation
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -512,17 +485,13 @@ class _StudyScreenState extends ConsumerState<StudyScreen> {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    card.translation,
-                    style: theme.textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
+                    translation,
+                    style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
               const SizedBox(height: 16),
-
-              // Example sentence
-              if (card.example.isNotEmpty)
+              if (example.isNotEmpty)
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -535,7 +504,7 @@ class _StudyScreenState extends ConsumerState<StudyScreen> {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      card.example,
+                      example,
                       style: theme.textTheme.bodySmall?.copyWith(
                         fontStyle: FontStyle.italic,
                         color: Colors.grey[700],
@@ -743,33 +712,5 @@ class _StudyScreenState extends ConsumerState<StudyScreen> {
   }
 }
 
-/// Model for study card
-class StudyCard {
-  final String id;
-  final String word;
-  final String translation;
-  final String example;
-  final String audioUrl;
-  final String language;
-
-  StudyCard({
-    required this.id,
-    required this.word,
-    required this.translation,
-    required this.example,
-    required this.audioUrl,
-    required this.language,
-  });
-
-  /// Convert from Flashcard model if needed
-  factory StudyCard.fromFlashcard(dynamic flashcard) {
-    return StudyCard(
-      id: flashcard.id,
-      word: flashcard.frontText,
-      translation: flashcard.backText,
-      example: flashcard.example ?? '',
-      audioUrl: flashcard.audioUrl ?? '',
-      language: flashcard.language ?? 'en',
-    );
-  }
-}
+/// Model for study card — delegates to domain Flashcard
+typedef StudyCard = Flashcard;

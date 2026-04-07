@@ -1,0 +1,111 @@
+Analyzing 3 items...                                            
+
+  error - The method 'isBefore' isn't defined for the type 'GeneratedColumn' - lib\data\datasources\local\database_helper.dart:148:34 - undefined_method
+  error - Undefined class 'StudyHistoryEntity' - lib\data\datasources\local\database_helper.dart:286:31 - undefined_class
+  error - Undefined name 'studyHistory' - lib\data\datasources\local\database_helper.dart:287:17 - undefined_identifier
+  error - The name 'StudyHistoryEntity' isn't a type, so it can't be used as a type argument - lib\data\datasources\local\database_helper.dart:291:15 - non_type_as_type_argument
+  error - Undefined name 'studyHistory' - lib\data\datasources\local\database_helper.dart:292:20 - undefined_identifier
+  error - The getter 'userId' isn't defined for the type 'HasResultSet' - lib\data\datasources\local\database_helper.dart:292:54 - undefined_getter
+  error - The name 'StudyHistoryEntity' isn't a type, so it can't be used as a type argument - lib\data\datasources\local\database_helper.dart:297:15 - non_type_as_type_argument
+  error - Undefined name 'studyHistory' - lib\data\datasources\local\database_helper.dart:302:20 - undefined_identifier
+  error - The getter 'userId' isn't defined for the type 'HasResultSet' - lib\data\datasources\local\database_helper.dart:304:19 - undefined_getter
+  error - The getter 'reviewDate' isn't defined for the type 'HasResultSet' - lib\data\datasources\local\database_helper.dart:305:19 - undefined_getter
+  error - The method 'isAfter' isn't defined for the type 'GeneratedColumn' - lib\data\datasources\local\database_helper.dart:319:28 - undefined_method
+  error - The named parameter 'createdAt' is required, but there's no corresponding argument - lib\data\datasources\local\database_helper.dart:326:22 - missing_required_argument
+  error - The named parameter 'deadline' is required, but there's no corresponding argument - lib\data\datasources\local\database_helper.dart:326:22 - missing_required_argument
+  error - The named parameter 'id' is required, but there's no corresponding argument - lib\data\datasources\local\database_helper.dart:326:22 - missing_required_argument
+  error - The named parameter 'title' is required, but there's no corresponding argument - lib\data\datasources\local\database_helper.dart:326:22 - missing_required_argument
+  error - The named parameter 'type' is required, but there's no corresponding argument - lib\data\datasources\local\database_helper.dart:326:22 - missing_required_argument
+  error - The named parameter 'userId' is required, but there's no corresponding argument - lib\data\datasources\local\database_helper.dart:326:22 - missing_required_argument
+  error - The named parameter 'xpReward' is required, but there's no corresponding argument - lib\data\datasources\local\database_helper.dart:326:22 - missing_required_argument
+  error - Undefined class 'StudyHistoryCompanion' - lib\data\datasources\local\database_helper.dart:354:34 - undefined_class
+  error - Undefined name 'studyHistory' - lib\data\datasources\local\database_helper.dart:355:17 - undefined_identifier
+  error - The function 'File' isn't defined - lib\data\datasources\local\database_helper.dart:396:18 - undefined_function
+  error - The named parameter 'name' is required, but there's no corresponding argument - lib\data\datasources\local\database_helper.dart:397:12 - missing_required_argument
+  error - Too many positional arguments: 0 expected, but 1 found - lib\data\datasources\local\database_helper.dart:397:26 - extra_positional_arguments_could_be_named
+  error - A value of type 'Object' can't be returned from the method '_getAuthToken' because it has a return type of 'Future<String>' - lib\data\datasources\remote\cloud_functions_ds.dart:257:12 - return_of_invalid_type
+   info - 'fetchSignInMethodsForEmail' is deprecated and shouldn't be used. fetchSignInMethodsForEmail() has been deprecated. Migrating off of this method is recommended as a security best-practice. Learn more in the Identity Platform documentation:  https://cloud.google.com/identity-platform/docs/admin/email-enumeration-protection - lib\data\repositories\auth_repository_impl.dart:193:43 - deprecated_member_use
+warning - The value of the field '_database' isn't used - lib\data\repositories\flashcard_repository_impl.dart:12:24 - unused_field
+  error - The method 'getDeckByIdIfExists' isn't defined for the type 'FlashcardLocalDataSource' - lib\data\repositories\flashcard_repository_impl.dart:38:48 - undefined_method
+  error - The argument type 'List<dynamic>' can't be assigned to the parameter type 'List<FlashcardRemote>'.  - lib\data\repositories\flashcard_repository_impl.dart:172:11 - argument_type_not_assignable
+  error - Undefined name '_mapLocalFlashcardToRemote' - lib\data\repositories\flashcard_repository_impl.dart:172:29 - undefined_identifier
+  error - The named parameter 'createdAt' is required, but there's no corresponding argument - lib\data\repositories\flashcard_repository_impl.dart:361:12 - missing_required_argument
+  error - The named parameter 'lastReviewedAt' is required, but there's no corresponding argument - lib\data\repositories\flashcard_repository_impl.dart:361:12 - missing_required_argument
+warning - The declaration '_getDeckDetailsHelper' isn't referenced - lib\data\repositories\flashcard_repository_impl.dart:475:23 - unused_element
+  error - The name 'LessonWithExercises' is defined in the libraries 'package:language_learning_app/data/datasources/remote/lesson_remote_ds.dart' and 'package:language_learning_app/domain/repositories/lesson_repository.dart' - lib\data\repositories\lesson_repository_impl.dart:122:10 - ambiguous_import
+  error - 'LessonRepositoryImpl.getLessonWithExercises' ('Future<dynamic> Function(String)') isn't a valid override of 'LessonRepository.getLessonWithExercises' ('Future<LessonWithExercises?> Function(String)') - lib\data\repositories\lesson_repository_impl.dart:122:32 - invalid_override
+  error - 'LessonWithExercises' isn't a function - lib\data\repositories\lesson_repository_impl.dart:130:16 - invocation_of_non_function
+  error - The name 'LessonWithExercises' is defined in the libraries 'package:language_learning_app/data/datasources/remote/lesson_remote_ds.dart' and 'package:language_learning_app/domain/repositories/lesson_repository.dart' - lib\data\repositories\lesson_repository_impl.dart:130:16 - ambiguous_import
+  error - The name 'UserProgress' is defined in the libraries 'package:language_learning_app/data/datasources/local/database_helper.dart' and 'package:language_learning_app/domain/repositories/progress_repository.dart' - lib\data\repositories\progress_repository_impl.dart:22:10 - ambiguous_import
+  error - 'ProgressRepositoryImpl.getUserProgress' ('Future<dynamic> Function(String)') isn't a valid override of 'ProgressRepository.getUserProgress' ('Future<UserProgress?> Function(String)') - lib\data\repositories\progress_repository_impl.dart:22:25 - invalid_override
+  error - The name 'UserProgress' is defined in the libraries 'package:language_learning_app/data/datasources/local/database_helper.dart' and 'package:language_learning_app/domain/repositories/progress_repository.dart' - lib\data\repositories\progress_repository_impl.dart:37:10 - ambiguous_import
+  error - 'ProgressRepositoryImpl.getOrCreateUserProgress' ('Future<dynamic> Function(String)') isn't a valid override of 'ProgressRepository.getOrCreateUserProgress' ('Future<UserProgress> Function(String)') - lib\data\repositories\progress_repository_impl.dart:37:24 - invalid_override
+warning - The value of the local variable 'localSession' isn't used - lib\data\repositories\progress_repository_impl.dart:93:13 - unused_local_variable
+  error - The method 'StudyHistoryCompanion' isn't defined for the type 'ProgressRepositoryImpl' - lib\data\repositories\progress_repository_impl.dart:95:9 - undefined_method
+warning - The value of the local variable 'todayStart' isn't used - lib\data\repositories\progress_repository_impl.dart:126:13 - unused_local_variable
+warning - The value of the local variable 'milestoneResult' isn't used - lib\data\repositories\progress_repository_impl.dart:251:15 - unused_local_variable
+  error - The name 'UserProgress' is defined in the libraries 'package:language_learning_app/data/datasources/local/database_helper.dart' and 'package:language_learning_app/domain/repositories/progress_repository.dart' - lib\data\repositories\progress_repository_impl.dart:278:3 - ambiguous_import
+  error - 'UserProgress' isn't a function - lib\data\repositories\progress_repository_impl.dart:279:12 - invocation_of_non_function
+  error - The name 'UserProgress' is defined in the libraries 'package:language_learning_app/data/datasources/local/database_helper.dart' and 'package:language_learning_app/domain/repositories/progress_repository.dart' - lib\data\repositories\progress_repository_impl.dart:279:12 - ambiguous_import
+  error - The named parameter 'xpEarned' isn't defined - lib\data\repositories\progress_repository_impl.dart:315:7 - undefined_named_parameter
+  error - 'LeaderboardEntry' isn't a function - lib\data\repositories\social_repository_impl.dart:29:29 - invocation_of_non_function
+  error - The name 'LeaderboardEntry' is defined in the libraries 'package:language_learning_app/data/datasources/remote/cloud_functions_ds.dart' and 'package:language_learning_app/domain/repositories/social_repository.dart' - lib\data\repositories\social_repository_impl.dart:29:29 - ambiguous_import
+warning - The operand can't be 'null', so the condition is always 'true' - lib\data\repositories\social_repository_impl.dart:57:18 - unnecessary_null_comparison
+warning - Dead code - lib\data\repositories\social_repository_impl.dart:66:7 - dead_code
+warning - The value of the local variable 'challenge' isn't used - lib\data\repositories\social_repository_impl.dart:127:13 - unused_local_variable
+   info - The type name 'AudioPlaybackState_State' isn't an UpperCamelCase identifier - lib\providers\audio_provider.dart:7:7 - camel_case_types
+  error - The argument type 'String?' can't be assigned to the parameter type 'Object'.  - lib\providers\audio_provider.dart:28:48 - argument_type_not_assignable
+   info - The type name 'RecordingState_State' isn't an UpperCamelCase identifier - lib\providers\audio_provider.dart:139:7 - camel_case_types
+warning - Unused import: 'package:language_learning_app/domain/usecases/get_flashcards_usecase.dart' - lib\providers\flashcard_provider.dart:3:8 - unused_import
+warning - The value of the local variable 'updatedCard' isn't used - lib\providers\flashcard_provider.dart:91:13 - unused_local_variable
+warning - Unused import: 'package:language_learning_app/domain/usecases/get_leaderboard_usecase.dart' - lib\providers\leaderboard_provider.dart:3:8 - unused_import
+warning - The value of the local variable 'userId' isn't used - lib\providers\leaderboard_provider.dart:216:12 - unused_local_variable
+warning - The value of the local variable 'timeframe' isn't used - lib\providers\leaderboard_provider.dart:216:20 - unused_local_variable
+warning - Unused import: 'package:language_learning_app/domain/usecases/get_user_stats_usecase.dart' - lib\providers\progress_provider.dart:3:8 - unused_import
+warning - The value of the local variable 'challengeId' isn't used - lib\providers\social_provider.dart:131:13 - unused_local_variable
+   info - The import of 'dart:ui' is unnecessary because all of the used elements are also provided by the import of 'package:flutter/material.dart' - lib\views\screens\auth\login_screen.dart:1:8 - unnecessary_import
+   info - Parameter 'key' could be a super parameter - lib\views\screens\flashcard_study_example_view.dart:18:9 - use_super_parameters
+  error - The name 'XpNotificationOverlayState' isn't a type, so it can't be used as a type argument - lib\views\screens\flashcard_study_example_view.dart:33:19 - non_type_as_type_argument
+   info - Don't use 'BuildContext's across async gaps - lib\views\screens\flashcard_study_example_view.dart:102:28 - use_build_context_synchronously
+  error - The method 'when' isn't defined for the type 'ProgressState' - lib\views\screens\flashcard_study_example_view.dart:270:34 - undefined_method
+   info - Unnecessary use of multiple underscores - lib\views\screens\flashcard_study_example_view.dart:296:26 - unnecessary_underscores
+  error - The method 'when' isn't defined for the type 'ProgressState' - lib\views\screens\flashcard_study_example_view.dart:301:27 - undefined_method
+  error - Expected to find '(' - lib\views\screens\flashcard_study_example_view.dart:380:43 - expected_token
+  error - The class 'EdgeInsets' doesn't have a constant constructor 'horizontal' - lib\views\screens\flashcard_study_example_view.dart:380:43 - const_with_undefined_constructor
+  error - Expected to find ')' - lib\views\screens\flashcard_study_example_view.dart:380:53 - expected_token
+  error - The name 'XpNotificationOverlayState' isn't a type, so it can't be used as a type argument - lib\views\screens\flashcard_study_example_view.dart:522:24 - non_type_as_type_argument
+  error - Undefined class 'XpNotificationOverlayState' - lib\views\screens\flashcard_study_example_view.dart:523:3 - undefined_class
+warning - The declaration '_state' isn't referenced - lib\views\screens\flashcard_study_example_view.dart:523:35 - unused_element
+  error - The method 'headline' isn't defined for the type 'AppTextStyles' - lib\views\screens\flashcards\flashcard_study_screen.dart:188:40 - undefined_method
+   info - Unnecessary use of multiple underscores - lib\views\screens\flashcards\flashcard_study_screen.dart:284:32 - unnecessary_underscores
+  error - Undefined name 'currentCard' - lib\views\screens\flashcards\study_screen.dart:447:17 - undefined_identifier
+warning - The value of the local variable 'deckListState' isn't used - lib\views\screens\home\dashboard_screen.dart:70:11 - unused_local_variable
+   info - Unnecessary use of multiple underscores - lib\views\screens\home\dashboard_screen.dart:138:26 - unnecessary_underscores
+warning - Unused import: 'package:language_learning_app/views/widgets/app_button.dart' - lib\views\screens\home\home_screen.dart:6:8 - unused_import
+warning - Unused import: 'package:language_learning_app/views/widgets/app_card.dart' - lib\views\screens\home\home_screen.dart:7:8 - unused_import
+warning - Unused import: 'package:language_learning_app/views/widgets/stat_chip.dart' - lib\views\screens\home\home_screen.dart:9:8 - unused_import
+warning - The value of the local variable 'isDark' isn't used - lib\views\screens\home\home_screen.dart:63:11 - unused_local_variable
+   info - Unnecessary use of multiple underscores - lib\views\screens\home\home_screen.dart:521:39 - unnecessary_underscores
+warning - The value of the local variable 'isDark' isn't used - lib\views\screens\home\home_screen.dart:650:11 - unused_local_variable
+   info - Unnecessary use of multiple underscores - lib\views\screens\progress\progress_screen.dart:33:37 - unnecessary_underscores
+   info - Unnecessary use of multiple underscores - lib\views\screens\progress\progress_screen.dart:46:37 - unnecessary_underscores
+   info - Unnecessary use of multiple underscores - lib\views\screens\progress\progress_screen.dart:76:35 - unnecessary_underscores
+   info - Unnecessary use of multiple underscores - lib\views\screens\progress\progress_screen.dart:82:35 - unnecessary_underscores
+   info - Unnecessary use of multiple underscores - lib\views\screens\progress\progress_screen.dart:88:35 - unnecessary_underscores
+   info - Unnecessary use of multiple underscores - lib\views\screens\progress\progress_screen.dart:94:35 - unnecessary_underscores
+   info - Unnecessary use of multiple underscores - lib\views\screens\progress\progress_screen.dart:118:39 - unnecessary_underscores
+   info - Unnecessary use of multiple underscores - lib\views\screens\progress\progress_screen.dart:159:33 - unnecessary_underscores
+   info - The private field _isLoading could be 'final' - lib\views\screens\social\leaderboard_screen.dart:23:8 - prefer_final_fields
+
+flutter : 96 issues found. (ran in 8.2s)
+At line:1 char:1
++ flutter analyze lib/providers/ lib/data/ 
+lib/views/screens/ 2>&1 | Ou ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: 
+(96     issues found. (ran in 8.2s):String) 
+[], Re    moteException
+    + FullyQualifiedErrorId : 
+NativeCommandErro    r
+ 

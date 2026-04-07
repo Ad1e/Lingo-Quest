@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:language_learning_app/domain/repositories/flashcard_repository.dart';
 import 'package:language_learning_app/domain/usecases/get_flashcards_usecase.dart';
 import 'package:language_learning_app/domain/usecases/study_flashcard_usecase.dart';
+import 'package:language_learning_app/providers/app_providers.dart';
 
 /// State for flashcard study session
 class StudySessionState {
@@ -221,11 +222,9 @@ class DeckListNotifier extends StateNotifier<DeckListState> {
 final studySessionProvider =
     StateNotifierProvider.family<StudySessionNotifier, StudySessionState, String>(
   (ref, userId) {
-    // TODO: Inject dependencies from ref
-    // final flashcardRepository = ref.watch(flashcardRepositoryProvider);
-    // final studyFlashcardUseCase = ref.watch(studyFlashcardUseCaseProvider);
-    // return StudySessionNotifier(flashcardRepository, studyFlashcardUseCase, userId);
-    throw UnimplementedError('Dependencies must be provided');
+    final flashcardRepository = ref.watch(flashcardRepositoryProvider);
+    final studyFlashcardUseCase = ref.watch(studyFlashcardUseCaseProvider);
+    return StudySessionNotifier(flashcardRepository, studyFlashcardUseCase, userId);
   },
 );
 
@@ -233,26 +232,20 @@ final studySessionProvider =
 final deckListProvider =
     StateNotifierProvider.family<DeckListNotifier, DeckListState, String>(
   (ref, userId) {
-    // TODO: Inject dependencies from ref
-    // final flashcardRepository = ref.watch(flashcardRepositoryProvider);
-    // return DeckListNotifier(flashcardRepository, userId);
-    throw UnimplementedError('Dependencies must be provided');
+    final flashcardRepository = ref.watch(flashcardRepositoryProvider);
+    return DeckListNotifier(flashcardRepository, userId);
   },
 );
 
 /// Provider to get current deck's cards
 final currentDeckCardsProvider =
     FutureProvider.family<List<Flashcard>, String>((ref, deckId) async {
-  // TODO: Inject dependencies
-  // final flashcardRepository = ref.watch(flashcardRepositoryProvider);
-  // return flashcardRepository.getFlashcardsByDeck(deckId);
-  throw UnimplementedError('Dependencies must be provided');
+  final flashcardRepository = ref.watch(flashcardRepositoryProvider);
+  return flashcardRepository.getFlashcardsByDeck(deckId);
 });
 
 /// Provider to get public decks for discovery
 final publicDecksProvider = FutureProvider<List<FlashcardDeck>>((ref) async {
-  // TODO: Inject dependencies
-  // final flashcardRepository = ref.watch(flashcardRepositoryProvider);
-  // return flashcardRepository.getPublicDecks();
-  throw UnimplementedError('Dependencies must be provided');
+  final flashcardRepository = ref.watch(flashcardRepositoryProvider);
+  return flashcardRepository.getPublicDecks();
 });

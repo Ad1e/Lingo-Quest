@@ -1,678 +1,360 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:hive/hive.dart';
+import 'package:iconsax/iconsax.dart';
+import 'package:language_learning_app/config/theme.dart';
+import 'package:language_learning_app/views/widgets/app_button.dart';
 
-/// Onboarding screen with 3-step setup wizard
-class OnboardingScreen extends ConsumerStatefulWidget {
-  /// Callback when onboarding is complete
+class OnboardingScreen extends StatefulWidget {
   final VoidCallback? onComplete;
-
-  const OnboardingScreen({
-    super.key,
-    this.onComplete,
-  }) : super();
-
+  const OnboardingScreen({super.key, this.onComplete});
   @override
-  ConsumerState<OnboardingScreen> createState() => _OnboardingScreenState();
+  State<OnboardingScreen> createState() => _OnboardingScreenState();
 }
 
-class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
-  late PageController _pageController;
-  int _currentStep = 0;
-  bool _isLoading = false;
-  String? _errorMessage;
+class _OnboardingScreenState extends State<OnboardingScreen> with TickerProviderStateMixin {
+  final PageController _pageCtrl = PageController();
+  int _page = 0;
+  String? _selectedLanguage;
+  int? _selectedGoal;
+  int? _selectedLevel;
 
-  // Step 1: Target language
-  String _selectedLanguage = 'Spanish';
-  final List<String> _languages = [
-    'Spanish',
-    'French',
-    'German',
-    'Italian',
-    'Portuguese',
-    'Japanese',
-    'Chinese',
-    'Korean',
+  // Blob painter colors per page
+  static const _blobColors = [
+    Color(0xFFEBF2FD), Color(0xFFF0F7FF), Color(0xFFE8F3FA), Color(0xFFEBF2FD),
   ];
 
-  // Step 2: Daily goal
-  int _selectedDailyGoal = 10;
-  final List<int> _dailyGoals = [5, 10, 15, 20];
-
-  // Step 3: Current level
-  String _selectedLevel = 'beginner';
-  final List<String> _levels = ['beginner', 'intermediate', 'advanced'];
-  final Map<String, String> _levelDescriptions = {
-    'beginner': 'Just starting out',
-    'intermediate': 'Some experience',
-    'advanced': 'Proficient learner',
-  };
+  void _next() {
+    if (_page < 3) {
+      _pageCtrl.nextPage(duration: const Duration(milliseconds: 350), curve: Curves.easeOutCubic);
+    } else {
+      widget.onComplete?.call();
+    }
+  }
 
   @override
-  void initState() {
-    super.initState();
-    _pageController = PageController(initialPage: 0);
-  }
-
-  /// Save settings to Hive
-  Future<void> _saveSettingsAndComplete() async {
-    setState(() {
-      _isLoading = true;
-      _errorMessage = null;
-    });
-
-    try {
-      // Save to Hive
-      final box = await Hive.openBox('settings');
-      await box.put('target_language', _selectedLanguage);
-      await box.put('daily_goal', _selectedDailyGoal);
-      await box.put('current_level', _selectedLevel);
-      await box.put('onboarding_complete', true);
-
-      // TODO: Update progress provider
-      // ref.read(progressProvider(userId).notifier).updateOnboardingSettings(
-      //   language: _selectedLanguage,
-      //   dailyGoal: _selectedDailyGoal,
-      //   level: _selectedLevel,
-      // );
-
-      setState(() => _isLoading = false);
-      widget.onComplete?.call();
-    } catch (e) {
-      setState(() {
-        _isLoading = false;
-        _errorMessage = 'Failed to save settings: $e';
-      });
-    }
-  }
-
-  /// Move to next step
-  void _nextStep() {
-    if (_currentStep < 2) {
-      _pageController.nextPage(
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeInOut,
-      );
-    }
-  }
-
-  /// Move to previous step
-  void _previousStep() {
-    if (_currentStep > 0) {
-      _pageController.previousPage(
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeInOut,
-      );
-    }
-  }
+  void dispose() { _pageCtrl.dispose(); super.dispose(); }
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Setup Your Learning'),
-        centerTitle: true,
-        elevation: 0,
-        backgroundColor: theme.primaryColor,
-        foregroundColor: Colors.white,
-        automaticallyImplyLeading: false,
-      ),
-      body: Column(
+      backgroundColor: AppColors.bgLight,
+      body: Stack(
         children: [
-          // Progress indicator
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: List.generate(
-                3,
-                (index) => Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8),
-                  child: Container(
-                    width: 12,
-                    height: 12,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: index <= _currentStep
-                          ? theme.primaryColor
-                          : Colors.grey[300],
-                    ),
-                  ),
-                ),
-              ),
+          // Blob background
+          AnimatedSwitcher(
+            duration: const Duration(milliseconds: 400),
+            child: CustomPaint(
+              key: ValueKey(_page),
+              painter: _BlobPainter(color: _blobColors[_page]),
+              size: Size(MediaQuery.of(context).size.width, MediaQuery.of(context).size.height * 0.42),
             ),
           ),
 
-          // Error message
-          if (_errorMessage != null)
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              child: Container(
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: theme.colorScheme.error.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(8),
-                  border: Border.all(color: theme.colorScheme.error),
-                ),
-                child: Text(
-                  _errorMessage!,
-                  style: theme.textTheme.bodySmall?.copyWith(
-                    color: theme.colorScheme.error,
+          SafeArea(
+            child: Column(children: [
+              // Skip
+              Align(
+                alignment: Alignment.topRight,
+                child: Padding(
+                  padding: const EdgeInsets.only(right: AppSpacing.screenH, top: 8),
+                  child: TextButton(
+                    onPressed: widget.onComplete,
+                    child: Text('Skip', style: AppTextStyles.caption(color: AppColors.neutralMid)),
                   ),
                 ),
               ),
-            ),
 
-          // PageView
-          Expanded(
-            child: PageView(
-              controller: _pageController,
-              physics: const NeverScrollableScrollPhysics(),
-              onPageChanged: (index) {
-                setState(() => _currentStep = index);
-              },
-              children: [
-                // Step 1: Target Language
-                _buildStep1TargetLanguage(theme),
-
-                // Step 2: Daily Goal
-                _buildStep2DailyGoal(theme),
-
-                // Step 3: Current Level
-                _buildStep3CurrentLevel(theme),
-              ],
-            ),
-          ),
-
-          // Navigation buttons
-          Padding(
-            padding: const EdgeInsets.all(24),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                // Previous button
-                OutlinedButton.icon(
-                  onPressed: _currentStep > 0 && !_isLoading ? _previousStep : null,
-                  icon: const Icon(Icons.arrow_back),
-                  label: const Text('Back'),
-                  style: OutlinedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 24,
-                      vertical: 12,
-                    ),
-                  ),
+              // PageView
+              Expanded(
+                child: PageView(
+                  controller: _pageCtrl,
+                  onPageChanged: (i) => setState(() => _page = i),
+                  children: [
+                    _LanguagePage(selected: _selectedLanguage, onSelect: (l) => setState(() => _selectedLanguage = l)),
+                    _GoalPage(selected: _selectedGoal, onSelect: (g) => setState(() => _selectedGoal = g)),
+                    _LevelPage(selected: _selectedLevel, onSelect: (l) => setState(() => _selectedLevel = l)),
+                    _SummaryPage(language: _selectedLanguage, goal: _selectedGoal, level: _selectedLevel),
+                  ],
                 ),
+              ),
 
-                // Next/Complete button
-                if (_currentStep < 2)
-                  ElevatedButton.icon(
-                    onPressed: _isLoading ? null : _nextStep,
-                    icon: const Icon(Icons.arrow_forward),
-                    label: const Text('Next'),
-                    style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 24,
-                        vertical: 12,
+              // Dots + button
+              Padding(
+                padding: const EdgeInsets.fromLTRB(AppSpacing.screenH, 0, AppSpacing.screenH, 24),
+                child: Column(children: [
+                  Row(mainAxisAlignment: MainAxisAlignment.center, children: List.generate(4, (i) {
+                    final active = i == _page;
+                    return AnimatedContainer(
+                      duration: const Duration(milliseconds: 300),
+                      margin: const EdgeInsets.symmetric(horizontal: 4),
+                      width: active ? 24 : 8,
+                      height: 8,
+                      decoration: BoxDecoration(
+                        color: active ? AppColors.primary : AppColors.neutralLight,
+                        borderRadius: BorderRadius.circular(AppRadius.chip),
                       ),
-                      backgroundColor: theme.primaryColor,
-                    ),
-                  )
-                else
-                  ElevatedButton(
-                    onPressed: _isLoading ? null : _saveSettingsAndComplete,
-                    style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 32,
-                        vertical: 12,
-                      ),
-                      backgroundColor: theme.primaryColor,
-                    ),
-                    child: _isLoading
-                        ? SizedBox(
-                            height: 20,
-                            width: 20,
-                            child: CircularProgressIndicator(
-                              valueColor:
-                                  const AlwaysStoppedAnimation<Color>(Colors.white),
-                              strokeWidth: 2,
-                            ),
-                          )
-                        : const Text('Complete'),
+                    );
+                  })),
+                  const SizedBox(height: 20),
+                  AppButton(
+                    label: _page == 3 ? 'Start learning' : 'Continue',
+                    onPressed: _next,
+                    trailingIcon: _page < 3 ? Iconsax.arrow_right_3 : null,
                   ),
-              ],
-            ),
+                ]),
+              ),
+            ]),
           ),
         ],
       ),
     );
   }
+}
 
-  /// Step 1: Select target language
-  Widget _buildStep1TargetLanguage(ThemeData theme) {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(24),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Step 1 of 3',
-            style: theme.textTheme.labelMedium?.copyWith(
-              color: theme.primaryColor,
-            ),
-          ),
-          const SizedBox(height: 12),
-          Text(
-            'What language do you want to learn?',
-            style: theme.textTheme.headlineSmall?.copyWith(
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(height: 12),
-          Text(
-            'Choose your target language to begin your learning journey.',
-            style: theme.textTheme.bodyMedium?.copyWith(
-              color: Colors.grey[600],
-            ),
-          ),
-          const SizedBox(height: 32),
+// ── Pages ────────────────────────────────────────────────────────────────────
 
-          // Language dropdown
-          DropdownButtonFormField<String>(
-            initialValue: _selectedLanguage,
-            items: _languages
-                .map(
-                  (lang) => DropdownMenuItem(
-                    value: lang,
-                    child: Text(lang),
+class _LanguagePage extends StatelessWidget {
+  final String? selected;
+  final ValueChanged<String> onSelect;
+  const _LanguagePage({this.selected, required this.onSelect});
+
+  static const _langs = [
+    ('🇪🇸', 'Spanish'), ('🇫🇷', 'French'), ('🇩🇪', 'German'), ('🇯🇵', 'Japanese'),
+    ('🇰🇷', 'Korean'), ('🇮🇹', 'Italian'),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: AppSpacing.screenH),
+      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        const SizedBox(height: 16),
+        Text('Choose your\nlanguage', style: AppTextStyles.display().copyWith(fontSize: 24, fontWeight: FontWeight.w800), textAlign: TextAlign.left),
+        const SizedBox(height: 8),
+        Text('Pick the language you want to learn today', style: AppTextStyles.caption()),
+        const SizedBox(height: 24),
+        Expanded(
+          child: GridView.builder(
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2, mainAxisSpacing: 12, crossAxisSpacing: 12, childAspectRatio: 2.2,
+            ),
+            itemCount: _langs.length,
+            itemBuilder: (_, i) {
+              final lang = _langs[i];
+              final active = selected == lang.$2;
+              return GestureDetector(
+                onTap: () => onSelect(lang.$2),
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 200),
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  decoration: BoxDecoration(
+                    color: active ? AppColors.primaryMid : AppColors.surfaceLight,
+                    borderRadius: BorderRadius.circular(AppRadius.card),
+                    border: Border.all(color: active ? AppColors.primary : AppColors.borderLight, width: active ? 2 : 1),
+                    boxShadow: active ? null : AppShadows.card,
                   ),
-                )
-                .toList(),
-            onChanged: (value) {
-              if (value != null) {
-                setState(() => _selectedLanguage = value);
-              }
+                  child: Row(children: [
+                    Text(lang.$1, style: const TextStyle(fontSize: 24)),
+                    const SizedBox(width: 10),
+                    Text(lang.$2, style: AppTextStyles.bodySemiBold(color: active ? AppColors.primary : null)),
+                  ]),
+                ),
+              );
             },
-            decoration: InputDecoration(
-              labelText: 'Target Language',
-              prefixIcon: const Icon(Icons.language),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-            ),
-            isExpanded: true,
           ),
-          const SizedBox(height: 32),
-
-          // Language info card
-          Card(
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Row(
-                children: [
-                  Icon(
-                    Icons.info_outline,
-                    color: theme.primaryColor,
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Pro Tip',
-                          style: theme.textTheme.labelLarge,
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          'You can change your target language anytime in settings.',
-                          style: theme.textTheme.bodySmall?.copyWith(
-                            color: Colors.grey[600],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
+        ),
+      ]),
     );
   }
+}
 
-  /// Step 2: Select daily goal
-  Widget _buildStep2DailyGoal(ThemeData theme) {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(24),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Step 2 of 3',
-            style: theme.textTheme.labelMedium?.copyWith(
-              color: theme.primaryColor,
-            ),
-          ),
-          const SizedBox(height: 12),
-          Text(
-            'What\'s your daily learning goal?',
-            style: theme.textTheme.headlineSmall?.copyWith(
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(height: 12),
-          Text(
-            'Choose a realistic daily commitment to stay motivated.',
-            style: theme.textTheme.bodyMedium?.copyWith(
-              color: Colors.grey[600],
-            ),
-          ),
-          const SizedBox(height: 32),
+class _GoalPage extends StatelessWidget {
+  final int? selected;
+  final ValueChanged<int> onSelect;
+  const _GoalPage({this.selected, required this.onSelect});
 
-          // Daily goal selection
-          Column(
-            children: _dailyGoals
-                .map(
-                  (goal) => Padding(
-                    padding: const EdgeInsets.only(bottom: 12),
-                    child: GestureDetector(
-                      onTap: () => setState(() => _selectedDailyGoal = goal),
-                      child: Container(
-                        padding: const EdgeInsets.all(16),
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: _selectedDailyGoal == goal
-                                ? theme.primaryColor
-                                : Colors.grey[300]!,
-                            width: _selectedDailyGoal == goal ? 2 : 1,
-                          ),
-                          borderRadius: BorderRadius.circular(12),
-                          color: _selectedDailyGoal == goal
-                              ? theme.primaryColor.withValues(alpha: 0.1)
-                              : Colors.transparent,
-                        ),
-                        child: Row(
-                          children: [
-                            Container(
-                              width: 24,
-                              height: 24,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                border: Border.all(
-                                  color: _selectedDailyGoal == goal
-                                      ? theme.primaryColor
-                                      : Colors.grey[400]!,
-                                  width: 2,
-                                ),
-                              ),
-                              child: _selectedDailyGoal == goal
-                                  ? Center(
-                                      child: Container(
-                                        width: 12,
-                                        height: 12,
-                                        decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          color: theme.primaryColor,
-                                        ),
-                                      ),
-                                    )
-                                  : null,
-                            ),
-                            const SizedBox(width: 16),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    '$goal minutes per day',
-                                    style: theme.textTheme.titleSmall?.copyWith(
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 4),
-                                  Text(
-                                    _getGoalDescription(goal),
-                                    style: theme.textTheme.bodySmall?.copyWith(
-                                      color: Colors.grey[600],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Icon(
-                              Icons.check_circle,
-                              color: _selectedDailyGoal == goal
-                                  ? theme.primaryColor
-                                  : Colors.transparent,
-                            ),
-                          ],
-                        ),
-                      ),
+  static const _goals = [
+    (5, 'Casual', Iconsax.cup),
+    (10, 'Regular', Iconsax.medal),
+    (15, 'Serious', Iconsax.award),
+    (20, 'Intense', Iconsax.flash_1),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: AppSpacing.screenH),
+      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        const SizedBox(height: 16),
+        Text('Set your\ndaily goal', style: AppTextStyles.display().copyWith(fontSize: 24, fontWeight: FontWeight.w800)),
+        const SizedBox(height: 8),
+        Text('How much time can you dedicate each day?', style: AppTextStyles.caption()),
+        const SizedBox(height: 24),
+        ...List.generate(_goals.length, (i) {
+          final g = _goals[i];
+          final active = selected == g.$1;
+          return Padding(
+            padding: const EdgeInsets.only(bottom: 12),
+            child: GestureDetector(
+              onTap: () => onSelect(g.$1),
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 200),
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: active ? AppColors.primaryMid : AppColors.bgLight,
+                  borderRadius: BorderRadius.circular(AppRadius.card),
+                  border: Border.all(color: active ? AppColors.primary : AppColors.borderLight, width: active ? 2 : 1),
+                  boxShadow: active ? null : AppShadows.card,
+                ),
+                child: Row(children: [
+                  Container(
+                    width: 40, height: 40,
+                    decoration: BoxDecoration(
+                      color: active ? AppColors.primary : AppColors.neutralLight,
+                      borderRadius: BorderRadius.circular(AppRadius.iconBox),
                     ),
+                    child: Icon(g.$3, size: 20, color: active ? Colors.white : AppColors.neutralMid),
                   ),
-                )
-                .toList(),
-          ),
-          const SizedBox(height: 24),
-
-          // Goal info
-          Card(
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Row(
-                children: [
-                  Icon(
-                    Icons.trending_up,
-                    color: theme.primaryColor,
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Consistency matters',
-                          style: theme.textTheme.labelLarge,
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          'Studies show that regular practice is more effective than longer sessions.',
-                          style: theme.textTheme.bodySmall?.copyWith(
-                            color: Colors.grey[600],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
+                  const SizedBox(width: 14),
+                  Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                    Text('${g.$1} min / day', style: AppTextStyles.bodySemiBold(color: active ? AppColors.primary : null)),
+                    Text(g.$2, style: AppTextStyles.caption()),
+                  ])),
+                  if (active) const Icon(Iconsax.tick_circle5, color: AppColors.primary, size: 20),
+                ]),
               ),
             ),
-          ),
-        ],
-      ),
+          );
+        }),
+      ]),
     );
   }
+}
 
-  /// Step 3: Select current level
-  Widget _buildStep3CurrentLevel(ThemeData theme) {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(24),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Step 3 of 3',
-            style: theme.textTheme.labelMedium?.copyWith(
-              color: theme.primaryColor,
-            ),
-          ),
-          const SizedBox(height: 12),
-          Text(
-            'What\'s your current level?',
-            style: theme.textTheme.headlineSmall?.copyWith(
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(height: 12),
-          Text(
-            'This helps us personalize your learning path.',
-            style: theme.textTheme.bodyMedium?.copyWith(
-              color: Colors.grey[600],
-            ),
-          ),
-          const SizedBox(height: 32),
+class _LevelPage extends StatelessWidget {
+  final int? selected;
+  final ValueChanged<int> onSelect;
+  const _LevelPage({this.selected, required this.onSelect});
 
-          // Level selection
-          Column(
-            children: _levels
-                .map(
-                  (level) => Padding(
-                    padding: const EdgeInsets.only(bottom: 12),
-                    child: GestureDetector(
-                      onTap: () => setState(() => _selectedLevel = level),
-                      child: Container(
-                        padding: const EdgeInsets.all(16),
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: _selectedLevel == level
-                                ? theme.primaryColor
-                                : Colors.grey[300]!,
-                            width: _selectedLevel == level ? 2 : 1,
-                          ),
-                          borderRadius: BorderRadius.circular(12),
-                          color: _selectedLevel == level
-                              ? theme.primaryColor.withValues(alpha: 0.1)
-                              : Colors.transparent,
-                        ),
-                        child: Row(
-                          children: [
-                            Container(
-                              width: 24,
-                              height: 24,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                border: Border.all(
-                                  color: _selectedLevel == level
-                                      ? theme.primaryColor
-                                      : Colors.grey[400]!,
-                                  width: 2,
-                                ),
-                              ),
-                              child: _selectedLevel == level
-                                  ? Center(
-                                      child: Container(
-                                        width: 12,
-                                        height: 12,
-                                        decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          color: theme.primaryColor,
-                                        ),
-                                      ),
-                                    )
-                                  : null,
-                            ),
-                            const SizedBox(width: 16),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    _capitalize(level),
-                                    style: theme.textTheme.titleSmall?.copyWith(
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 4),
-                                  Text(
-                                    _levelDescriptions[level] ?? '',
-                                    style: theme.textTheme.bodySmall?.copyWith(
-                                      color: Colors.grey[600],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Icon(
-                              Icons.check_circle,
-                              color: _selectedLevel == level
-                                  ? theme.primaryColor
-                                  : Colors.transparent,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                )
-                .toList(),
-          ),
-          const SizedBox(height: 24),
+  static const _levels = [
+    ('Beginner', "I'm just starting out", Iconsax.star),
+    ('Intermediate', 'I know some basics', Iconsax.star_1),
+    ('Advanced', 'I can hold conversations', Iconsax.flash_1),
+  ];
 
-          // Level info
-          Card(
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Row(
-                children: [
-                  Icon(
-                    Icons.school,
-                    color: theme.primaryColor,
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Be honest',
-                          style: theme.textTheme.labelLarge,
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          'Accurate level assessment ensures you get the right content.',
-                          style: theme.textTheme.bodySmall?.copyWith(
-                            color: Colors.grey[600],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: AppSpacing.screenH),
+      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        const SizedBox(height: 16),
+        Text("What's your\nlevel?", style: AppTextStyles.display().copyWith(fontSize: 24, fontWeight: FontWeight.w800)),
+        const SizedBox(height: 8),
+        Text("We'll personalize your learning path", style: AppTextStyles.caption()),
+        const SizedBox(height: 24),
+        ...List.generate(_levels.length, (i) {
+          final l = _levels[i];
+          final active = selected == i;
+          return Padding(
+            padding: const EdgeInsets.only(bottom: 12),
+            child: GestureDetector(
+              onTap: () => onSelect(i),
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 200),
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: active ? AppColors.primaryMid : AppColors.bgLight,
+                  borderRadius: BorderRadius.circular(AppRadius.card),
+                  border: Border.all(color: active ? AppColors.primary : AppColors.borderLight, width: active ? 2 : 1),
+                  boxShadow: active ? null : AppShadows.card,
+                ),
+                child: Row(children: [
+                  Icon(l.$3, size: 24, color: active ? AppColors.primary : AppColors.neutralMid),
+                  const SizedBox(width: 14),
+                  Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                    Text(l.$1, style: AppTextStyles.bodySemiBold(color: active ? AppColors.primary : null)),
+                    Text(l.$2, style: AppTextStyles.caption()),
+                  ])),
+                  if (active) const Icon(Iconsax.tick_circle5, color: AppColors.primary, size: 20),
+                ]),
               ),
             ),
-          ),
-        ],
-      ),
+          );
+        }),
+      ]),
     );
   }
+}
 
-  /// Get description for daily goal
-  String _getGoalDescription(int goal) {
-    switch (goal) {
-      case 5:
-        return 'Start small, build consistency';
-      case 10:
-        return 'Sweet spot for regular learners';
-      case 15:
-        return 'Dedicated learner schedule';
-      case 20:
-        return 'Intensive learning path';
-      default:
-        return '';
-    }
+class _SummaryPage extends StatelessWidget {
+  final String? language;
+  final int? goal;
+  final int? level;
+  const _SummaryPage({this.language, this.goal, this.level});
+
+  static const _levelLabels = ['Beginner', 'Intermediate', 'Advanced'];
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: AppSpacing.screenH),
+      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        const SizedBox(height: 16),
+        Text("You're all set! 🎉", style: AppTextStyles.display().copyWith(fontSize: 24, fontWeight: FontWeight.w800)),
+        const SizedBox(height: 8),
+        Text("Here's your personalized learning plan", style: AppTextStyles.caption()),
+        const SizedBox(height: 32),
+        _SummaryRow(icon: Iconsax.translate, label: 'Language', value: language ?? 'Not selected'),
+        _SummaryRow(icon: Iconsax.timer_1, label: 'Daily goal', value: goal != null ? '$goal min / day' : 'Not selected'),
+        _SummaryRow(icon: Iconsax.medal, label: 'Level', value: level != null ? _levelLabels[level!] : 'Not selected'),
+      ]),
+    );
   }
+}
 
-  /// Capitalize string
-  String _capitalize(String str) {
-    return str[0].toUpperCase() + str.substring(1);
+class _SummaryRow extends StatelessWidget {
+  final IconData icon;
+  final String label, value;
+  const _SummaryRow({required this.icon, required this.label, required this.value});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 16),
+      child: Row(children: [
+        Container(
+          width: 44, height: 44,
+          decoration: BoxDecoration(color: AppColors.primaryMid, borderRadius: BorderRadius.circular(AppRadius.iconBox)),
+          child: Icon(icon, size: 20, color: AppColors.primary),
+        ),
+        const SizedBox(width: 14),
+        Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Text(label, style: AppTextStyles.caption()),
+          Text(value, style: AppTextStyles.bodySemiBold()),
+        ])),
+      ]),
+    );
+  }
+}
+
+// ── Blob CustomPainter ───────────────────────────────────────────────────────
+
+class _BlobPainter extends CustomPainter {
+  final Color color;
+  const _BlobPainter({required this.color});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()..color = color;
+    final path = Path();
+    path.moveTo(0, 0);
+    path.lineTo(size.width, 0);
+    path.lineTo(size.width, size.height * 0.72);
+    path.quadraticBezierTo(size.width * 0.75, size.height, size.width * 0.5, size.height * 0.85);
+    path.quadraticBezierTo(size.width * 0.25, size.height * 0.7, 0, size.height * 0.9);
+    path.close();
+    canvas.drawPath(path, paint);
   }
 
   @override
-  void dispose() {
-    _pageController.dispose();
-    super.dispose();
-  }
+  bool shouldRepaint(_BlobPainter old) => old.color != color;
 }

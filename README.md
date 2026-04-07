@@ -1,0 +1,1 @@
+A comprehensive language learning app with spaced repetition flashcards, audio pronunciation, interactive lessons, and competitive leaderboards.

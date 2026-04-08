@@ -51,7 +51,7 @@ class DefaultFirebaseOptions {
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyAkby_w-0aXyw1te3jX1xkRkGeBP2YvEhU',
+    apiKey: "YOUR_API_KEY",
     appId: '1:733694166310:android:2ad6f7ca6f89368b512de7',
     messagingSenderId: '733694166310',
     projectId: 'lingoquest-d47b0',
@@ -59,7 +59,7 @@ class DefaultFirebaseOptions {
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyA-FqzE9Br0HaCZ8l1fzm4RGYdNiVToS5U',
+    apiKey: "YOUR_API_KEY",
     appId: '1:733694166310:ios:3a578108c919887d512de7',
     messagingSenderId: '733694166310',
     projectId: 'lingoquest-d47b0',
@@ -68,7 +68,7 @@ class DefaultFirebaseOptions {
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyA-FqzE9Br0HaCZ8l1fzm4RGYdNiVToS5U',
+    apiKey: "YOUR_API_KEY",
     appId: '1:733694166310:ios:3a578108c919887d512de7',
     messagingSenderId: '733694166310',
     projectId: 'lingoquest-d47b0',
@@ -77,7 +77,7 @@ class DefaultFirebaseOptions {
   );
 
   static const FirebaseOptions windows = FirebaseOptions(
-    apiKey: 'AIzaSyB883FNKEverPTY37IChntR7GY-MmeYjUQ',
+    apiKey: "YOUR_API_KEY",
     appId: '1:733694166310:web:b967bedea7f7749d512de7',
     messagingSenderId: '733694166310',
     projectId: 'lingoquest-d47b0',

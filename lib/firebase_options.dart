@@ -41,7 +41,7 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyB883FNKEverPTY37IChntR7GY-MmeYjUQ',
+    apiKey: "YOUR_API_KEY",
     appId: '1:733694166310:web:126e3f53e1c68d10512de7',
     messagingSenderId: '733694166310',
     projectId: 'lingoquest-d47b0',
